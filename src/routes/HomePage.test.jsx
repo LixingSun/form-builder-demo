@@ -1,9 +1,9 @@
-import Home from "./Home";
+import HomePage from "./HomePage";
 import { render, screen } from '@testing-library/react';
 
-describe("Home", () => {
+describe("HomePage", () => {
   test("should render home page", () => {
-    render(<Home />);
+    render(<HomePage />);
     const element = screen.getByText("Form Builder Demo");
     expect(element).toBeInTheDocument();
   });
