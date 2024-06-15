@@ -12,7 +12,7 @@ import {
  } from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
 
-export default function Home() {
+export default function Editor() {
   return (
     <Box sx={{minHeight: "100vh", display: 'flex', flexDirection: 'column'}}>
       <AppBar position="static">

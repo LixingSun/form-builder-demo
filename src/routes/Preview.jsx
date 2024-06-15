@@ -1,9 +1,10 @@
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-
 
 export default function Preview() {
   return (

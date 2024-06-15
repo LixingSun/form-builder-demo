@@ -10,17 +10,17 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import HomePage from "./routes/HomePage";
-import PreviewPage from "./routes/PreviewPage";
+import Home from "./routes/Editor";
+import Preview from "./routes/Preview";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <Home />,
   },
   {
     path: "/preview",
-    element: <PreviewPage />,
+    element: <Preview />,
   },
 ]);
 

@@ -1,9 +1,9 @@
-import PreviewPage from './PreviewPage';
+import Preview from './Preview';
 import { render, screen } from '@testing-library/react';
 
-describe("PreviewPage", () => {
+describe("Preview", () => {
   test("should render preview page", () => {
-    render(<PreviewPage />);
+    render(<Preview />);
     const element = screen.getByText("Form Builder Demo");
     expect(element).toBeInTheDocument();
   });
