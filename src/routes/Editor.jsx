@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -11,8 +12,11 @@ import {
   Stack,
 } from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
+import { SchemaContext } from '../context/SchemaContext';
 
 export default function Editor() {
+  const schema = useContext(SchemaContext);
+
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="static">
@@ -57,7 +61,7 @@ export default function Editor() {
           <Grid item xs={12} md={9}>
             <Container maxWidth="sm" sx={{ paddingTop: 4 }}>
               <Stack spacing={2}>
-                <Typography variant="h6">Test Form</Typography>
+                <Typography variant="h6">{schema.title}</Typography>
                 <Card>
                   <CardContent>Placeholder</CardContent>
                 </Card>
