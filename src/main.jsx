@@ -7,9 +7,9 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from './routes/Editor';
-import Preview from './routes/Preview';
-import { SchemaProvider } from './context/SchemaContext';
+import Home from '@/pages/Editor/Editor';
+import Preview from '@/pages/Preview/Preview';
+import { SchemaProvider } from '@/context/SchemaContext';
 
 const router = createBrowserRouter([
   {

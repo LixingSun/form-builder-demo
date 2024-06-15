@@ -12,7 +12,7 @@ import {
   Stack,
 } from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
-import { SchemaContext } from '../context/SchemaContext';
+import { SchemaContext } from '@/context/SchemaContext';
 
 export default function Editor() {
   const schema = useContext(SchemaContext);

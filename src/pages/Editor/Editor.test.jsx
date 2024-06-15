@@ -1,6 +1,6 @@
 import Editor from './Editor';
 import { render, screen } from '@testing-library/react';
-import { SchemaContext, initialSchema } from '../context/SchemaContext';
+import { SchemaContext, initialSchema } from '@/context/SchemaContext';
 
 const renderWithContext = (schema = initialSchema) => {
   render(
