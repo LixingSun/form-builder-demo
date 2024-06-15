@@ -1,5 +1,5 @@
-import { 
-  AppBar, 
+import {
+  AppBar,
   Toolbar,
   Typography,
   Button,
@@ -8,26 +8,41 @@ import {
   Container,
   Card,
   CardContent,
-  Stack
- } from '@mui/material';
+  Stack,
+} from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
 
 export default function Editor() {
   return (
-    <Box sx={{minHeight: "100vh", display: 'flex', flexDirection: 'column'}}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Form Builder Demo
           </Typography>
-          <Button color="inherit" endIcon={<PreviewIcon />}>Preview</Button>
+          <Button color="inherit" endIcon={<PreviewIcon />}>
+            Preview
+          </Button>
         </Toolbar>
       </AppBar>
 
-      <Box sx={{flex: 1, display: 'flex', flexDirection: 'column', bgcolor: "#eeeeee"}}>
-        <Grid container sx={{flex: 1}}>
-          <Grid item xs={12} md={3} sx={{p: 4, bgcolor: "primary.light"}}>
-            <Typography variant="h6" color="primary.contrastText" sx={{marginBottom: 2}}>Create Field</Typography>
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          bgcolor: '#eeeeee',
+        }}
+      >
+        <Grid container sx={{ flex: 1 }}>
+          <Grid item xs={12} md={3} sx={{ p: 4, bgcolor: 'primary.light' }}>
+            <Typography
+              variant="h6"
+              color="primary.contrastText"
+              sx={{ marginBottom: 2 }}
+            >
+              Create Field
+            </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <Card>
@@ -40,7 +55,7 @@ export default function Editor() {
           </Grid>
 
           <Grid item xs={12} md={9}>
-            <Container maxWidth="sm" sx={{paddingTop: 4}}>
+            <Container maxWidth="sm" sx={{ paddingTop: 4 }}>
               <Stack spacing={2}>
                 <Typography variant="h6">Test Form</Typography>
                 <Card>
