@@ -5,7 +5,19 @@ export const initialSchema = {
   title: 'Test Form',
   fields: [
     {
+      id: '1',
       type: 'textField',
+      title: 'First Name',
+      description: 'Please enter your first name',
+      required: true,
+      maxLength: null,
+    },
+    {
+      id: '2',
+      type: 'textField',
+      title: 'Last Name',
+      description: 'Please enter your last name',
+      required: true,
       maxLength: null,
     },
   ],

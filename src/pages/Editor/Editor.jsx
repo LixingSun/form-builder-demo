@@ -1,18 +1,9 @@
 import { useContext } from 'react';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  Grid,
-  Container,
-  Card,
-  CardContent,
-  Stack,
-} from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, Grid } from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Preview';
 import { SchemaContext } from '@/context/SchemaContext';
+import EditorMenu from './EditorMenu';
+import EditorContent from './EditorContent';
 
 export default function Editor() {
   const schema = useContext(SchemaContext);
@@ -40,33 +31,11 @@ export default function Editor() {
       >
         <Grid container sx={{ flex: 1 }}>
           <Grid item xs={12} md={3} sx={{ p: 4, bgcolor: 'primary.light' }}>
-            <Typography
-              variant="h6"
-              color="primary.contrastText"
-              sx={{ marginBottom: 2 }}
-            >
-              Create Field
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Card>
-                  <CardContent>
-                    <Typography>Text Field</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
+            <EditorMenu />
           </Grid>
 
           <Grid item xs={12} md={9}>
-            <Container maxWidth="sm" sx={{ paddingTop: 4 }}>
-              <Stack spacing={2}>
-                <Typography variant="h6">{schema.title}</Typography>
-                <Card>
-                  <CardContent>Placeholder</CardContent>
-                </Card>
-              </Stack>
-            </Container>
+            <EditorContent schema={schema} />
           </Grid>
         </Grid>
       </Box>
