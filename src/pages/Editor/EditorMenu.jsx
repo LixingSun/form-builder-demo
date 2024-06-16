@@ -1,4 +1,22 @@
 import { Typography, Grid, Card, CardContent } from '@mui/material';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import { PropTypes } from 'prop-types';
+
+const EditorMenuItem = ({ name, icon: Icon }) => {
+  return (
+    <Card>
+      <CardContent sx={{ display: 'flex', paddingTop: 3 }}>
+        <Icon />
+        <Typography sx={{ marginLeft: 1 }}>{name}</Typography>
+      </CardContent>
+    </Card>
+  );
+};
+
+EditorMenuItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  icon: PropTypes.elementType.isRequired,
+};
 
 export default function EditorMenu() {
   return (
@@ -13,11 +31,7 @@ export default function EditorMenu() {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Card>
-            <CardContent>
-              <Typography>Text Field</Typography>
-            </CardContent>
-          </Card>
+          <EditorMenuItem name={'Text Field'} icon={TextFieldsIcon} />
         </Grid>
       </Grid>
     </>
