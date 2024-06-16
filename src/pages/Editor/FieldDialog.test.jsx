@@ -1,0 +1,86 @@
+import { vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
+import FieldDialog from './FieldDialog';
+import { fieldTypes } from './fieldConstants';
+
+describe('FieldDialog', () => {
+  const mockDisplayName = 'Display Name';
+
+  test('should show modal when it is open', () => {
+    render(
+      <FieldDialog
+        open={true}
+        fieldType={fieldTypes.textField}
+        fieldDisplayName={mockDisplayName}
+        onClose={() => {}}
+        onSubmit={() => {}}
+      />
+    );
+    const element = screen.getByText(`Create Field - ${mockDisplayName}`);
+    expect(element).toBeInTheDocument();
+  });
+
+  test('should not show modal when it is closed', () => {
+    render(
+      <FieldDialog
+        open={false}
+        fieldType={fieldTypes.textField}
+        fieldDisplayName={mockDisplayName}
+        onClose={() => {}}
+        onSubmit={() => {}}
+      />
+    );
+    const element = screen.queryByText(`Create Field - ${mockDisplayName}`);
+    expect(element).not.toBeInTheDocument();
+  });
+
+  test('should trigger onClose when cancel button is clicked', () => {
+    const mockOnCloseCallback = vi.fn();
+    render(
+      <FieldDialog
+        open={true}
+        fieldType={fieldTypes.textField}
+        fieldDisplayName={mockDisplayName}
+        onClose={mockOnCloseCallback}
+        onSubmit={() => {}}
+      />
+    );
+
+    const cancelButton = screen.getByText(/cancel/i);
+    fireEvent.click(cancelButton);
+    expect(mockOnCloseCallback).toHaveBeenCalled();
+  });
+
+  test('should trigger onSubmit when submit button is clicked', () => {
+    const mockOnSubmitCallback = vi.fn();
+    render(
+      <FieldDialog
+        open={true}
+        fieldType={fieldTypes.textField}
+        fieldDisplayName={mockDisplayName}
+        onClose={() => {}}
+        onSubmit={mockOnSubmitCallback}
+      />
+    );
+
+    const mockTitle = 'Title';
+
+    const titleConfigInput = screen
+      .getByTestId('field-dialog')
+      .querySelector('input[name=title]');
+
+    fireEvent.change(titleConfigInput, { target: { value: mockTitle } });
+    fireEvent.blur(titleConfigInput);
+
+    const submitButton = screen.getByText('Create');
+    fireEvent.click(submitButton);
+
+    expect(mockOnSubmitCallback).toHaveBeenCalledWith({
+      title: mockTitle,
+      description: '',
+      maxLength: null,
+      isRequired: false,
+    });
+  });
+});

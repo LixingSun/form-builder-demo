@@ -2,15 +2,37 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  TextField,
   DialogTitle,
   Button,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-export default function FieldDialog({ open, fieldType, onClose, onSubmit }) {
+import { getFieldConfig } from './fieldConfig';
+
+const formatFormJson = (formJson) => {
+  let formattedFormJson = structuredClone(formJson);
+
+  formattedFormJson = {
+    ...formattedFormJson,
+    isRequired: formJson.isRequired == 'on',
+  };
+
+  if ('maxLength' in formattedFormJson && formattedFormJson.maxLength == '') {
+    formattedFormJson.maxLength = null;
+  }
+  return formattedFormJson;
+};
+
+export default function FieldDialog({
+  open,
+  fieldType,
+  fieldDisplayName,
+  onClose,
+  onSubmit,
+}) {
   return (
     <Dialog
+      data-testid="field-dialog"
       fullWidth
       maxWidth="sm"
       open={open}
@@ -21,22 +43,13 @@ export default function FieldDialog({ open, fieldType, onClose, onSubmit }) {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries(formData.entries());
-          onSubmit(formJson);
+          const formattedFormJson = formatFormJson(formJson);
+          onSubmit(formattedFormJson);
         },
       }}
     >
-      <DialogTitle>Create Field - {fieldType}</DialogTitle>
-      <DialogContent>
-        <TextField
-          required
-          margin="dense"
-          id="field-title"
-          name="fieldTitle"
-          label="Field Title"
-          fullWidth
-          variant="standard"
-        />
-      </DialogContent>
+      <DialogTitle>Create Field - {fieldDisplayName}</DialogTitle>
+      <DialogContent>{getFieldConfig(fieldType)}</DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button type="submit">Create</Button>
@@ -48,6 +61,7 @@ export default function FieldDialog({ open, fieldType, onClose, onSubmit }) {
 FieldDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   fieldType: PropTypes.string.isRequired,
+  fieldDisplayName: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

@@ -9,6 +9,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import PropTypes from 'prop-types';
 import FieldDialog from './FieldDialog';
 import { useState } from 'react';
+import { fieldTypeDisplayNames, fieldTypes } from './fieldConstants';
 
 const EditorMenuItem = ({ name, icon: Icon, onClick }) => {
   return (
@@ -49,21 +50,24 @@ export default function EditorMenu() {
             name={'Text Field'}
             icon={TextFieldsIcon}
             onClick={() => {
-              setFieldCreationType('Text Field');
+              setFieldCreationType(fieldTypes.textField);
               setIsFieldCreationOpen(true);
             }}
           />
         </Grid>
       </Grid>
-      <FieldDialog
-        open={isFieldCreationOpen}
-        fieldType={fieldCreationType}
-        onClose={() => setIsFieldCreationOpen(false)}
-        onSubmit={(formData) => {
-          console.log(formData);
-          setIsFieldCreationOpen(false);
-        }}
-      />
+      {fieldCreationType && (
+        <FieldDialog
+          open={isFieldCreationOpen}
+          fieldType={fieldCreationType}
+          fieldDisplayName={fieldTypeDisplayNames[fieldCreationType]}
+          onClose={() => setIsFieldCreationOpen(false)}
+          onSubmit={(formData) => {
+            console.log(formData);
+            setIsFieldCreationOpen(false);
+          }}
+        />
+      )}
     </>
   );
 }
