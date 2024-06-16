@@ -1,14 +1,24 @@
-import { Typography, Grid, Card, CardContent } from '@mui/material';
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardActionArea,
+} from '@mui/material';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
+import FieldDialog from './FieldDialog';
+import { useState } from 'react';
 
-const EditorMenuItem = ({ name, icon: Icon }) => {
+const EditorMenuItem = ({ name, icon: Icon, onClick }) => {
   return (
     <Card>
-      <CardContent sx={{ display: 'flex', paddingTop: 3 }}>
-        <Icon />
-        <Typography sx={{ marginLeft: 1 }}>{name}</Typography>
-      </CardContent>
+      <CardActionArea onClick={onClick}>
+        <CardContent sx={{ display: 'flex' }}>
+          <Icon />
+          <Typography sx={{ marginLeft: 1 }}>{name}</Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 };
@@ -16,9 +26,13 @@ const EditorMenuItem = ({ name, icon: Icon }) => {
 EditorMenuItem.propTypes = {
   name: PropTypes.string.isRequired,
   icon: PropTypes.elementType.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default function EditorMenu() {
+  const [isFieldCreationOpen, setIsFieldCreationOpen] = useState(false);
+  const [fieldCreationType, setFieldCreationType] = useState('');
+
   return (
     <>
       <Typography
@@ -31,9 +45,25 @@ export default function EditorMenu() {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <EditorMenuItem name={'Text Field'} icon={TextFieldsIcon} />
+          <EditorMenuItem
+            name={'Text Field'}
+            icon={TextFieldsIcon}
+            onClick={() => {
+              setFieldCreationType('Text Field');
+              setIsFieldCreationOpen(true);
+            }}
+          />
         </Grid>
       </Grid>
+      <FieldDialog
+        open={isFieldCreationOpen}
+        fieldType={fieldCreationType}
+        onClose={() => setIsFieldCreationOpen(false)}
+        onSubmit={(formData) => {
+          console.log(formData);
+          setIsFieldCreationOpen(false);
+        }}
+      />
     </>
   );
 }
