@@ -45,18 +45,18 @@ export default function EditorContent({ schema }) {
                     </Grid>
                     <Grid item xs></Grid>
                     <Grid item>
-                      <Grid container columnSpacing={1}>
-                        <Grid Item>
+                      <Grid container>
+                        <Grid item>
                           <IconButton size="small" aria-label="Edit">
                             <EditIcon fontSize="inherit" />
                           </IconButton>
                         </Grid>
-                        <Grid Item>
+                        <Grid item>
                           <IconButton size="small" aria-label="Delete">
                             <DeleteIcon fontSize="inherit" />
                           </IconButton>
                         </Grid>
-                        <Grid Item>
+                        <Grid item>
                           <IconButton
                             size="small"
                             aria-label="Move Up"
@@ -65,7 +65,7 @@ export default function EditorContent({ schema }) {
                             <KeyboardArrowUpIcon fontSize="inherit" />
                           </IconButton>
                         </Grid>
-                        <Grid Item>
+                        <Grid item>
                           <IconButton
                             size="small"
                             aria-label="Move Down"
