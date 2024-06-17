@@ -1,7 +1,8 @@
 import { TextField, FormControlLabel, Switch } from '@mui/material';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
+import PropTypes from 'prop-types';
 
-function TitleConfig() {
+function TitleConfig({ defaultValue }) {
   return (
     <TextField
       required
@@ -11,11 +12,15 @@ function TitleConfig() {
       label="Field Title"
       fullWidth
       variant="standard"
+      defaultValue={defaultValue}
     />
   );
 }
+TitleConfig.propTypes = {
+  defaultValue: PropTypes.string,
+};
 
-function DescriptionConfig() {
+function DescriptionConfig({ defaultValue }) {
   return (
     <TextField
       margin="dense"
@@ -24,11 +29,15 @@ function DescriptionConfig() {
       label="Field Description"
       fullWidth
       variant="standard"
+      defaultValue={defaultValue}
     />
   );
 }
+DescriptionConfig.propTypes = {
+  defaultValue: PropTypes.string,
+};
 
-function MaxLengthConfig() {
+function MaxLengthConfig({ defaultValue }) {
   return (
     <TextField
       margin="dense"
@@ -38,30 +47,43 @@ function MaxLengthConfig() {
       type="number"
       fullWidth
       variant="standard"
+      defaultValue={defaultValue}
     />
   );
 }
+MaxLengthConfig.propTypes = {
+  defaultValue: PropTypes.string,
+};
 
-function RequiredConfig() {
+function RequiredConfig({ defaultValue }) {
   return (
     <FormControlLabel
       name="isRequired"
-      control={<Switch />}
+      control={<Switch defaultChecked={defaultValue} />}
       label="Required"
       sx={{ marginTop: 2, marginBottom: 1 }}
     />
   );
 }
+RequiredConfig.propTypes = {
+  defaultValue: PropTypes.bool,
+};
 
-export const getFieldConfig = (fieldType) => {
+export const getFieldConfig = (fieldType, initialValues) => {
+  const getDefaultValue = (attr) => {
+    if (!initialValues) return {};
+
+    return { defaultValue: initialValues[attr] };
+  };
+
   switch (fieldType) {
     case FIELD_TYPES.textField:
       return (
         <>
-          <TitleConfig />
-          <DescriptionConfig />
-          <MaxLengthConfig />
-          <RequiredConfig />
+          <TitleConfig {...getDefaultValue('title')} />
+          <DescriptionConfig {...getDefaultValue('description')} />
+          <MaxLengthConfig {...getDefaultValue('maxLength')} />
+          <RequiredConfig {...getDefaultValue('isRequired')} />
         </>
       );
   }

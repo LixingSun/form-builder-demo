@@ -30,6 +30,7 @@ export default function FieldDialog({
   fieldDisplayName,
   onClose,
   onSubmit,
+  initialValues,
 }) {
   const newFieldId = uuidv4();
 
@@ -55,11 +56,13 @@ export default function FieldDialog({
         },
       }}
     >
-      <DialogTitle>Create Field - {fieldDisplayName}</DialogTitle>
-      <DialogContent>{getFieldConfig(fieldType)}</DialogContent>
+      <DialogTitle>
+        {!initialValues ? 'Create' : 'Edit'} Field - {fieldDisplayName}
+      </DialogTitle>
+      <DialogContent>{getFieldConfig(fieldType, initialValues)}</DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button type="submit">Create</Button>
+        <Button type="submit">{!initialValues ? 'Create' : 'Save'}</Button>
       </DialogActions>
     </Dialog>
   );
@@ -71,4 +74,5 @@ FieldDialog.propTypes = {
   fieldDisplayName: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
 };

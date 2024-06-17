@@ -89,4 +89,33 @@ describe('FieldDialog', () => {
       isRequired: false,
     });
   });
+
+  test('should handle editing case when initial values are provided', () => {
+    const mockInitialTitle = 'Initial Title';
+    const mockInitialValue = {
+      id: '1',
+      type: FIELD_TYPES.textField,
+      title: mockInitialTitle,
+      isRequired: true,
+    };
+
+    render(
+      <FieldDialog
+        open={true}
+        fieldType={FIELD_TYPES.textField}
+        fieldDisplayName={mockDisplayName}
+        onClose={() => {}}
+        onSubmit={() => {}}
+        initialValues={mockInitialValue}
+      />
+    );
+
+    const element = screen.getByText(`Edit Field - ${mockDisplayName}`);
+    expect(element).toBeInTheDocument();
+
+    const titleConfigInput = screen
+      .getByTestId('field-dialog')
+      .querySelector('input[name=title]');
+    expect(titleConfigInput.value).toEqual(mockInitialTitle);
+  });
 });

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { PropTypes } from 'prop-types';
 import {
   Typography,
   CardContent,
@@ -13,13 +15,27 @@ import {
   KeyboardArrowUp as KeyboardArrowUpIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
 } from '@mui/icons-material';
-import { PropTypes } from 'prop-types';
 import {
   FIELD_TYPE_ICON_MAPPING,
+  FIELD_TYPE_NAME_MAPPING,
   FIELD_TYPES,
 } from '@/constants/fieldConstants';
+import FieldDialog from './FieldDialog';
 
 export default function EditorContent({ schema }) {
+  const [isFieldEdittingOpen, setIsFieldEdittingOpen] = useState(false);
+  const [fieldEdittingType, setFieldEdittingType] = useState(
+    FIELD_TYPES.textField
+  );
+  const [fieldEdittingInitialValues, setFieldEdittingInitialValues] =
+    useState(null);
+
+  const handleEditField = (field) => {
+    setFieldEdittingType(field.type);
+    setIsFieldEdittingOpen(true);
+    setFieldEdittingInitialValues(field);
+  };
+
   return (
     <>
       <Container maxWidth="sm" sx={{ paddingTop: 4 }}>
@@ -47,7 +63,12 @@ export default function EditorContent({ schema }) {
                     <Grid item>
                       <Grid container>
                         <Grid item>
-                          <IconButton size="small" aria-label="Edit">
+                          <IconButton
+                            size="small"
+                            aria-label="Edit"
+                            data-testid={`edit-field-button-${index}`}
+                            onClick={() => handleEditField(field)}
+                          >
                             <EditIcon fontSize="inherit" />
                           </IconButton>
                         </Grid>
@@ -85,6 +106,23 @@ export default function EditorContent({ schema }) {
           })}
         </Stack>
       </Container>
+
+      <FieldDialog
+        open={isFieldEdittingOpen}
+        fieldType={fieldEdittingType}
+        fieldDisplayName={FIELD_TYPE_NAME_MAPPING[fieldEdittingType]}
+        initialValues={fieldEdittingInitialValues}
+        onClose={() => setIsFieldEdittingOpen(false)}
+        onSubmit={(formData) => {
+          // TODO: dispath field editing
+          // dispatch({
+          //   type: ACTION_TYPE_ADD_FIELD,
+          //   field: formData,
+          // });
+          console.log(formData);
+          setIsFieldEdittingOpen(false);
+        }}
+      />
     </>
   );
 }
