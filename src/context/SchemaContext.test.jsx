@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import {
   ACTION_TYPE_ADD_FIELD,
   ACTION_TYPE_INIT_SCHEMA,
@@ -6,6 +7,21 @@ import {
   SchemaProvider,
   schemaReducer,
 } from './SchemaContext';
+
+const localStorageMock = (() => {
+  let store = {};
+
+  return {
+    getItem: (key) => store[key] || null,
+    setItem: (key, value) => {
+      store[key] = value.toString();
+    },
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+});
 
 describe('SchemaContext', () => {
   describe('SchemaProvider', () => {
@@ -24,12 +40,17 @@ describe('SchemaContext', () => {
   describe('schemaReducer', () => {
     test('should handle schema initialization', () => {
       const newSchema = { title: 'New Schema', fields: [] };
+      vi.spyOn(window.localStorage, 'getItem').mockImplementation(() =>
+        JSON.stringify(newSchema)
+      );
+
       const actualNewSchema = schemaReducer(INITIAL_SCHEMA, {
         type: ACTION_TYPE_INIT_SCHEMA,
-        schema: newSchema,
       });
 
       expect(actualNewSchema).toEqual(newSchema);
+
+      vi.restoreAllMocks();
     });
 
     test('should handle field addition', () => {

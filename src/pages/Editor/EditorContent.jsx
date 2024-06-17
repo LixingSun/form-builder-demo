@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { PropTypes } from 'prop-types';
 import {
   Typography,
@@ -21,6 +21,10 @@ import {
   FIELD_TYPES,
 } from '@/constants/fieldConstants';
 import FieldDialog from './FieldDialog';
+import {
+  ACTION_TYPE_EDIT_FIELD,
+  SchemaDispatchContext,
+} from '@/context/SchemaContext';
 
 export default function EditorContent({ schema }) {
   const [isFieldEdittingOpen, setIsFieldEdittingOpen] = useState(false);
@@ -29,6 +33,7 @@ export default function EditorContent({ schema }) {
   );
   const [fieldEdittingInitialValues, setFieldEdittingInitialValues] =
     useState(null);
+  const dispatch = useContext(SchemaDispatchContext);
 
   const handleEditField = (field) => {
     setFieldEdittingType(field.type);
@@ -114,12 +119,10 @@ export default function EditorContent({ schema }) {
         initialValues={fieldEdittingInitialValues}
         onClose={() => setIsFieldEdittingOpen(false)}
         onSubmit={(formData) => {
-          // TODO: dispath field editing
-          // dispatch({
-          //   type: ACTION_TYPE_ADD_FIELD,
-          //   field: formData,
-          // });
-          console.log(formData);
+          dispatch({
+            type: ACTION_TYPE_EDIT_FIELD,
+            field: formData,
+          });
           setIsFieldEdittingOpen(false);
         }}
       />

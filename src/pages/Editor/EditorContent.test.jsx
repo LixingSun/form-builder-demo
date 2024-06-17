@@ -1,6 +1,7 @@
 import EditorContent from './EditorContent';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { INITIAL_SCHEMA } from '@/context/SchemaContext';
+import { INITIAL_SCHEMA, SchemaDispatchContext } from '@/context/SchemaContext';
+import { vi } from 'vitest';
 import {
   FIELD_TYPES,
   FIELD_TYPE_NAME_MAPPING,
@@ -51,6 +52,30 @@ describe('EditorContent', () => {
         `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
+    });
+  });
+
+  test('should trigger submisson and close dialog when submit callback is triggered', async () => {
+    const mockDispatch = vi.fn();
+
+    render(
+      <SchemaDispatchContext.Provider value={mockDispatch}>
+        <EditorContent schema={INITIAL_SCHEMA} />
+      </SchemaDispatchContext.Provider>
+    );
+
+    const editButton = screen.getByTestId('edit-field-button-0');
+    fireEvent.click(editButton);
+
+    const submitButton = screen.getByText('Save');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      const dialogTitleElement = screen.queryByText(
+        `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
+      );
+      expect(dialogTitleElement).not.toBeInTheDocument();
+      expect(mockDispatch).toHaveBeenCalledOnce();
     });
   });
 });

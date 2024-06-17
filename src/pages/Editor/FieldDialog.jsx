@@ -48,7 +48,7 @@ export default function FieldDialog({
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries(formData.entries());
           const formattedFormJson = formatFormJson({
-            id: newFieldId,
+            id: initialValues ? initialValues.id : newFieldId,
             type: fieldType,
             ...formJson,
           });
