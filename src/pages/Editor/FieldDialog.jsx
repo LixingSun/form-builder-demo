@@ -8,6 +8,7 @@ import {
 import PropTypes from 'prop-types';
 
 import { getFieldConfig } from './fieldConfig';
+import { v4 as uuidv4 } from 'uuid';
 
 const formatFormJson = (formJson) => {
   let formattedFormJson = structuredClone(formJson);
@@ -30,6 +31,8 @@ export default function FieldDialog({
   onClose,
   onSubmit,
 }) {
+  const newFieldId = uuidv4();
+
   return (
     <Dialog
       data-testid="field-dialog"
@@ -43,7 +46,10 @@ export default function FieldDialog({
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
           const formJson = Object.fromEntries(formData.entries());
-          const formattedFormJson = formatFormJson(formJson);
+          const formattedFormJson = formatFormJson({
+            id: newFieldId,
+            ...formJson,
+          });
           onSubmit(formattedFormJson);
         },
       }}

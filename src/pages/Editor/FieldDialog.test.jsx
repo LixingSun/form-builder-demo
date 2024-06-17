@@ -4,9 +4,15 @@ import { fireEvent } from '@testing-library/react';
 import FieldDialog from './FieldDialog';
 import { FIELD_TYPES } from './fieldConstants';
 
-describe('FieldDialog', () => {
-  const mockDisplayName = 'Display Name';
+const mockDisplayName = 'Display Name';
+const mockUuid = 'mock-uuid-value';
+vi.mock('uuid', () => {
+  return {
+    v4: vi.fn(() => mockUuid),
+  };
+});
 
+describe('FieldDialog', () => {
   test('should show modal when it is open', () => {
     render(
       <FieldDialog
@@ -65,11 +71,9 @@ describe('FieldDialog', () => {
     );
 
     const mockTitle = 'Title';
-
     const titleConfigInput = screen
       .getByTestId('field-dialog')
       .querySelector('input[name=title]');
-
     fireEvent.change(titleConfigInput, { target: { value: mockTitle } });
     fireEvent.blur(titleConfigInput);
 
@@ -77,6 +81,7 @@ describe('FieldDialog', () => {
     fireEvent.click(submitButton);
 
     expect(mockOnSubmitCallback).toHaveBeenCalledWith({
+      id: mockUuid,
       title: mockTitle,
       description: '',
       maxLength: null,

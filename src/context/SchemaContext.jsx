@@ -26,9 +26,11 @@ export const INITIAL_SCHEMA = {
 export const SchemaContext = createContext(null);
 export const SchemaDispatchContext = createContext(null);
 
-const schemaReducer = (schema, action) => {
+export const ACTION_TYPE_ADD_FIELD = 'addField';
+
+export const schemaReducer = (schema, action) => {
   switch (action.type) {
-    case 'addField':
+    case ACTION_TYPE_ADD_FIELD:
       return {
         ...schema,
         fields: [...schema.fields, action.field],
