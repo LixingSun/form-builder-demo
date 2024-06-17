@@ -5,11 +5,14 @@ import {
   CardContent,
   CardActionArea,
 } from '@mui/material';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
 import PropTypes from 'prop-types';
 import FieldDialog from './FieldDialog';
 import { useContext, useState } from 'react';
-import { FIELD_TYPE_DISPLAY_NAMES, FIELD_TYPES } from './fieldConstants';
+import {
+  FIELD_TYPES,
+  FIELD_TYPE_NAME_MAPPING,
+  FIELD_TYPE_ICON_MAPPING,
+} from '@/constants/fieldConstants';
 import {
   SchemaDispatchContext,
   ACTION_TYPE_ADD_FIELD,
@@ -58,7 +61,7 @@ export default function EditorMenu() {
           <EditorMenuItem
             name={'Text Field'}
             id="text-field-menu-item"
-            icon={TextFieldsIcon}
+            icon={FIELD_TYPE_ICON_MAPPING[FIELD_TYPES.textField]}
             onClick={() => {
               setFieldCreationType(FIELD_TYPES.textField);
               setIsFieldCreationOpen(true);
@@ -70,7 +73,7 @@ export default function EditorMenu() {
       <FieldDialog
         open={isFieldCreationOpen}
         fieldType={fieldCreationType}
-        fieldDisplayName={FIELD_TYPE_DISPLAY_NAMES[fieldCreationType]}
+        fieldDisplayName={FIELD_TYPE_NAME_MAPPING[fieldCreationType]}
         onClose={() => setIsFieldCreationOpen(false)}
         onSubmit={(formData) => {
           dispatch({

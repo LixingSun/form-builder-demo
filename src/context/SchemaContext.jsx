@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { FIELD_TYPES } from '@/constants/fieldConstants';
 
 const LOCALSTORAGE_KEY_SCHEMA = 'form-builder-demo-schema';
 
@@ -8,7 +9,7 @@ export const INITIAL_SCHEMA = {
   fields: [
     {
       id: '1',
-      type: 'textField',
+      type: FIELD_TYPES.textField,
       title: 'First Name',
       description: 'Please enter your first name',
       required: true,
@@ -16,7 +17,7 @@ export const INITIAL_SCHEMA = {
     },
     {
       id: '2',
-      type: 'textField',
+      type: FIELD_TYPES.textField,
       title: 'Last Name',
       description: 'Please enter your last name',
       required: true,

@@ -1,5 +1,5 @@
 import { TextField, FormControlLabel, Switch } from '@mui/material';
-import { FIELD_TYPES } from './fieldConstants';
+import { FIELD_TYPES } from '@/constants/fieldConstants';
 
 function TitleConfig() {
   return (

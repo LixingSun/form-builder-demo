@@ -1,8 +1,11 @@
 import EditorMenu from './EditorMenu';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { FIELD_TYPES, FIELD_TYPE_DISPLAY_NAMES } from './fieldConstants';
+import {
+  FIELD_TYPES,
+  FIELD_TYPE_NAME_MAPPING,
+} from '@/constants/fieldConstants';
 import { expect, vi } from 'vitest';
-import { SchemaDispatchContext } from '../../context/SchemaContext';
+import { SchemaDispatchContext } from '@/context/SchemaContext';
 
 describe('EditorMenu', () => {
   test('should render menu title', () => {
@@ -21,7 +24,7 @@ describe('EditorMenu', () => {
     fireEvent.click(menuItem);
 
     const dialogTitleElement = screen.getByText(
-      `Create Field - ${FIELD_TYPE_DISPLAY_NAMES[FIELD_TYPES.textField]}`
+      `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
     );
     expect(dialogTitleElement).toBeInTheDocument();
   });
@@ -39,7 +42,7 @@ describe('EditorMenu', () => {
 
     await waitFor(() => {
       const dialogTitleElement = screen.queryByText(
-        `Create Field - ${FIELD_TYPE_DISPLAY_NAMES[FIELD_TYPES.textField]}`
+        `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
     });
@@ -70,7 +73,7 @@ describe('EditorMenu', () => {
 
     await waitFor(() => {
       const dialogTitleElement = screen.queryByText(
-        `Create Field - ${FIELD_TYPE_DISPLAY_NAMES[FIELD_TYPES.textField]}`
+        `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
       expect(mockDispatch).toHaveBeenCalledOnce();

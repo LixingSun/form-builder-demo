@@ -48,6 +48,7 @@ export default function FieldDialog({
           const formJson = Object.fromEntries(formData.entries());
           const formattedFormJson = formatFormJson({
             id: newFieldId,
+            type: fieldType,
             ...formJson,
           });
           onSubmit(formattedFormJson);

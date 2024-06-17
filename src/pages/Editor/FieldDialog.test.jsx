@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { fireEvent } from '@testing-library/react';
 import FieldDialog from './FieldDialog';
-import { FIELD_TYPES } from './fieldConstants';
+import { FIELD_TYPES } from '@/constants/fieldConstants';
 
 const mockDisplayName = 'Display Name';
 const mockUuid = 'mock-uuid-value';
@@ -83,6 +83,7 @@ describe('FieldDialog', () => {
     expect(mockOnSubmitCallback).toHaveBeenCalledWith({
       id: mockUuid,
       title: mockTitle,
+      type: FIELD_TYPES.textField,
       description: '',
       maxLength: null,
       isRequired: false,
