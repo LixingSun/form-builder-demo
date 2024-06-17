@@ -5,7 +5,10 @@ import {
   FIELD_TYPE_NAME_MAPPING,
 } from '@/constants/fieldConstants';
 import { expect, vi } from 'vitest';
-import { SchemaDispatchContext } from '@/context/SchemaContext';
+import {
+  SchemaDispatchContext,
+  ACTION_TYPE_ADD_FIELD,
+} from '@/context/SchemaContext';
 
 describe('EditorMenu', () => {
   test('should render menu title', () => {
@@ -76,7 +79,9 @@ describe('EditorMenu', () => {
         `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
-      expect(mockDispatch).toHaveBeenCalledOnce();
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ type: ACTION_TYPE_ADD_FIELD })
+      );
     });
   });
 });

@@ -23,6 +23,7 @@ import {
 import FieldDialog from './FieldDialog';
 import {
   ACTION_TYPE_EDIT_FIELD,
+  ACTION_TYPE_DELETE_FIELD,
   SchemaDispatchContext,
 } from '@/context/SchemaContext';
 
@@ -39,6 +40,10 @@ export default function EditorContent({ schema }) {
     setFieldEdittingType(field.type);
     setIsFieldEdittingOpen(true);
     setFieldEdittingInitialValues(field);
+  };
+
+  const handleDeleteField = (field) => {
+    dispatch({ type: ACTION_TYPE_DELETE_FIELD, field: field });
   };
 
   return (
@@ -78,7 +83,12 @@ export default function EditorContent({ schema }) {
                           </IconButton>
                         </Grid>
                         <Grid item>
-                          <IconButton size="small" aria-label="Delete">
+                          <IconButton
+                            size="small"
+                            aria-label="Delete"
+                            data-testid={`delete-field-button-${index}`}
+                            onClick={() => handleDeleteField(field)}
+                          >
                             <DeleteIcon fontSize="inherit" />
                           </IconButton>
                         </Grid>

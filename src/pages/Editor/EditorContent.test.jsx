@@ -1,6 +1,11 @@
 import EditorContent from './EditorContent';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { INITIAL_SCHEMA, SchemaDispatchContext } from '@/context/SchemaContext';
+import {
+  INITIAL_SCHEMA,
+  SchemaDispatchContext,
+  ACTION_TYPE_EDIT_FIELD,
+  ACTION_TYPE_DELETE_FIELD,
+} from '@/context/SchemaContext';
 import { vi } from 'vitest';
 import {
   FIELD_TYPES,
@@ -75,7 +80,29 @@ describe('EditorContent', () => {
         `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
-      expect(mockDispatch).toHaveBeenCalledOnce();
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ type: ACTION_TYPE_EDIT_FIELD })
+      );
+    });
+  });
+
+  test('should delete field when delete icon is clicked', () => {
+    const mockDispatch = vi.fn();
+
+    const onlyField = INITIAL_SCHEMA.fields[0];
+
+    render(
+      <SchemaDispatchContext.Provider value={mockDispatch}>
+        <EditorContent schema={{ title: 'Form', fields: [onlyField] }} />
+      </SchemaDispatchContext.Provider>
+    );
+
+    const deleteButton = screen.getByTestId('delete-field-button-0');
+    fireEvent.click(deleteButton);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: ACTION_TYPE_DELETE_FIELD,
+      field: onlyField,
     });
   });
 });

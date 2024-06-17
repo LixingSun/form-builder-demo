@@ -32,6 +32,7 @@ export const SchemaDispatchContext = createContext(null);
 export const ACTION_TYPE_INIT_SCHEMA = 'initSchema';
 export const ACTION_TYPE_ADD_FIELD = 'addField';
 export const ACTION_TYPE_EDIT_FIELD = 'editField';
+export const ACTION_TYPE_DELETE_FIELD = 'deleteField';
 
 export const schemaReducer = (schema, action) => {
   let newSchema;
@@ -58,6 +59,13 @@ export const schemaReducer = (schema, action) => {
         fields: schema.fields.map((field) =>
           field.id == action.field.id ? action.field : field
         ),
+      };
+      syncSchemaToStorage();
+      return newSchema;
+    case ACTION_TYPE_DELETE_FIELD:
+      newSchema = {
+        ...schema,
+        fields: schema.fields.filter((field) => field.id !== action.field.id),
       };
       syncSchemaToStorage();
       return newSchema;
