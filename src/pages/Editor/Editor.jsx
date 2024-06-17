@@ -4,6 +4,7 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import { SchemaContext } from '@/context/SchemaContext';
 import EditorMenu from './EditorMenu';
 import EditorContent from './EditorContent';
+import { Link } from 'react-router-dom';
 
 export default function Editor() {
   const schema = useContext(SchemaContext);
@@ -15,9 +16,14 @@ export default function Editor() {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Form Builder Demo
           </Typography>
-          <Button color="inherit" endIcon={<PreviewIcon />}>
-            Preview
-          </Button>
+          <Link to="preview">
+            <Button
+              endIcon={<PreviewIcon />}
+              sx={{ color: 'primary.contrastText' }}
+            >
+              Preview
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
 
