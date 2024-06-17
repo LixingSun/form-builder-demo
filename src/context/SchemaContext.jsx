@@ -1,7 +1,7 @@
 import { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 
-export const initialSchema = {
+export const INITIAL_SCHEMA = {
   title: 'Test Form',
   fields: [
     {
@@ -40,7 +40,7 @@ const schemaReducer = (schema, action) => {
 };
 
 export function SchemaProvider({ children }) {
-  const [schema, dispatch] = useReducer(schemaReducer, initialSchema);
+  const [schema, dispatch] = useReducer(schemaReducer, INITIAL_SCHEMA);
 
   return (
     <SchemaContext.Provider value={schema}>

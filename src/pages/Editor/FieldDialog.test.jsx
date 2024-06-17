@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { fireEvent } from '@testing-library/react';
 import FieldDialog from './FieldDialog';
-import { fieldTypes } from './fieldConstants';
+import { FIELD_TYPES } from './fieldConstants';
 
 describe('FieldDialog', () => {
   const mockDisplayName = 'Display Name';
@@ -11,7 +11,7 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={true}
-        fieldType={fieldTypes.textField}
+        fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
         onSubmit={() => {}}
@@ -25,7 +25,7 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={false}
-        fieldType={fieldTypes.textField}
+        fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
         onSubmit={() => {}}
@@ -40,7 +40,7 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={true}
-        fieldType={fieldTypes.textField}
+        fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={mockOnCloseCallback}
         onSubmit={() => {}}
@@ -57,7 +57,7 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={true}
-        fieldType={fieldTypes.textField}
+        fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
         onSubmit={mockOnSubmitCallback}

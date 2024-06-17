@@ -1,5 +1,5 @@
 import { TextField, FormControlLabel, Switch } from '@mui/material';
-import { fieldTypes } from './fieldConstants';
+import { FIELD_TYPES } from './fieldConstants';
 
 function TitleConfig() {
   return (
@@ -55,7 +55,7 @@ function RequiredConfig() {
 
 export const getFieldConfig = (fieldType) => {
   switch (fieldType) {
-    case fieldTypes.textField:
+    case FIELD_TYPES.textField:
       return (
         <>
           <TitleConfig />

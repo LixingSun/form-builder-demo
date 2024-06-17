@@ -1,7 +1,7 @@
-export const fieldTypes = {
+export const FIELD_TYPES = {
   textField: 'textField',
 };
 
-export const fieldTypeDisplayNames = {
-  [fieldTypes.textField]: 'Text Field',
+export const FIELD_TYPE_DISPLAY_NAMES = {
+  [FIELD_TYPES.textField]: 'Text Field',
 };

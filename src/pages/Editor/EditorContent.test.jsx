@@ -1,21 +1,21 @@
 import EditorContent from './EditorContent';
 import { render, screen } from '@testing-library/react';
-import { initialSchema } from '@/context/SchemaContext';
+import { INITIAL_SCHEMA } from '@/context/SchemaContext';
 
-const renderEditor = (schema = initialSchema) => {
+const renderEditor = (schema = INITIAL_SCHEMA) => {
   render(<EditorContent schema={schema} />);
 };
 
 describe('EditorContent', () => {
   test('should render form title', () => {
     renderEditor();
-    const element = screen.getByText(initialSchema.title);
+    const element = screen.getByText(INITIAL_SCHEMA.title);
     expect(element).toBeInTheDocument();
   });
 
   test('should render every field for editing', () => {
     renderEditor();
-    initialSchema.fields.forEach((field) => {
+    INITIAL_SCHEMA.fields.forEach((field) => {
       const element = screen.getByText(field.title);
       expect(element).toBeInTheDocument();
     });

@@ -9,7 +9,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import PropTypes from 'prop-types';
 import FieldDialog from './FieldDialog';
 import { useState } from 'react';
-import { fieldTypeDisplayNames, fieldTypes } from './fieldConstants';
+import { FIELD_TYPE_DISPLAY_NAMES, FIELD_TYPES } from './fieldConstants';
 
 const EditorMenuItem = ({ name, icon: Icon, onClick }) => {
   return (
@@ -50,7 +50,7 @@ export default function EditorMenu() {
             name={'Text Field'}
             icon={TextFieldsIcon}
             onClick={() => {
-              setFieldCreationType(fieldTypes.textField);
+              setFieldCreationType(FIELD_TYPES.textField);
               setIsFieldCreationOpen(true);
             }}
           />
@@ -60,7 +60,7 @@ export default function EditorMenu() {
         <FieldDialog
           open={isFieldCreationOpen}
           fieldType={fieldCreationType}
-          fieldDisplayName={fieldTypeDisplayNames[fieldCreationType]}
+          fieldDisplayName={FIELD_TYPE_DISPLAY_NAMES[fieldCreationType]}
           onClose={() => setIsFieldCreationOpen(false)}
           onSubmit={(formData) => {
             console.log(formData);
