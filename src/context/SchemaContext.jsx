@@ -33,9 +33,14 @@ export const ACTION_TYPE_INIT_SCHEMA = 'initSchema';
 export const ACTION_TYPE_ADD_FIELD = 'addField';
 export const ACTION_TYPE_EDIT_FIELD = 'editField';
 export const ACTION_TYPE_DELETE_FIELD = 'deleteField';
+export const ACTION_TYPE_MOVE_UP_FIELD = 'moveUpField';
+export const ACTION_TYPE_MOVE_DOWN_FIELD = 'moveDownField';
 
 export const schemaReducer = (schema, action) => {
   let newSchema;
+  let fieldIndex;
+  let currentField;
+  let targetField;
 
   const syncSchemaToStorage = () => {
     localStorage.setItem(LOCALSTORAGE_KEY_SCHEMA, JSON.stringify(newSchema));
@@ -66,6 +71,46 @@ export const schemaReducer = (schema, action) => {
       newSchema = {
         ...schema,
         fields: schema.fields.filter((field) => field.id !== action.field.id),
+      };
+      syncSchemaToStorage();
+      return newSchema;
+    case ACTION_TYPE_MOVE_UP_FIELD:
+      fieldIndex = schema.fields.findIndex(
+        (field) => field.id == action.field.id
+      );
+      currentField = structuredClone(action.field);
+      targetField = structuredClone(schema.fields[fieldIndex - 1]);
+      newSchema = {
+        ...schema,
+        fields: schema.fields.map((field, index) => {
+          if (index == fieldIndex - 1) {
+            return currentField;
+          } else if (index == fieldIndex) {
+            return targetField;
+          } else {
+            return field;
+          }
+        }),
+      };
+      syncSchemaToStorage();
+      return newSchema;
+    case ACTION_TYPE_MOVE_DOWN_FIELD:
+      fieldIndex = schema.fields.findIndex(
+        (field) => field.id == action.field.id
+      );
+      currentField = structuredClone(action.field);
+      targetField = structuredClone(schema.fields[fieldIndex + 1]);
+      newSchema = {
+        ...schema,
+        fields: schema.fields.map((field, index) => {
+          if (index == fieldIndex + 1) {
+            return currentField;
+          } else if (index == fieldIndex) {
+            return targetField;
+          } else {
+            return field;
+          }
+        }),
       };
       syncSchemaToStorage();
       return newSchema;

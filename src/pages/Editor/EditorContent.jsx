@@ -24,6 +24,8 @@ import FieldDialog from './FieldDialog';
 import {
   ACTION_TYPE_EDIT_FIELD,
   ACTION_TYPE_DELETE_FIELD,
+  ACTION_TYPE_MOVE_UP_FIELD,
+  ACTION_TYPE_MOVE_DOWN_FIELD,
   SchemaDispatchContext,
 } from '@/context/SchemaContext';
 
@@ -44,6 +46,14 @@ export default function EditorContent({ schema }) {
 
   const handleDeleteField = (field) => {
     dispatch({ type: ACTION_TYPE_DELETE_FIELD, field: field });
+  };
+
+  const handleMoveUpField = (field) => {
+    dispatch({ type: ACTION_TYPE_MOVE_UP_FIELD, field: field });
+  };
+
+  const handleMoveDownField = (field) => {
+    dispatch({ type: ACTION_TYPE_MOVE_DOWN_FIELD, field: field });
   };
 
   return (
@@ -97,6 +107,8 @@ export default function EditorContent({ schema }) {
                             size="small"
                             aria-label="Move Up"
                             disabled={index == 0}
+                            data-testid={`move-up-field-button-${index}`}
+                            onClick={() => handleMoveUpField(field)}
                           >
                             <KeyboardArrowUpIcon fontSize="inherit" />
                           </IconButton>
@@ -106,6 +118,8 @@ export default function EditorContent({ schema }) {
                             size="small"
                             aria-label="Move Down"
                             disabled={index == schema.fields.length - 1}
+                            data-testid={`move-down-field-button-${index}`}
+                            onClick={() => handleMoveDownField(field)}
                           >
                             <KeyboardArrowDownIcon fontSize="inherit" />
                           </IconButton>

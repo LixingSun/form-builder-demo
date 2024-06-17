@@ -5,6 +5,8 @@ import {
   SchemaDispatchContext,
   ACTION_TYPE_EDIT_FIELD,
   ACTION_TYPE_DELETE_FIELD,
+  ACTION_TYPE_MOVE_UP_FIELD,
+  ACTION_TYPE_MOVE_DOWN_FIELD,
 } from '@/context/SchemaContext';
 import { vi } from 'vitest';
 import {
@@ -86,7 +88,7 @@ describe('EditorContent', () => {
     });
   });
 
-  test('should delete field when delete icon is clicked', () => {
+  test('should delete field when delete button is clicked', () => {
     const mockDispatch = vi.fn();
 
     const onlyField = INITIAL_SCHEMA.fields[0];
@@ -103,6 +105,52 @@ describe('EditorContent', () => {
     expect(mockDispatch).toHaveBeenCalledWith({
       type: ACTION_TYPE_DELETE_FIELD,
       field: onlyField,
+    });
+  });
+
+  test('should move up field when move up button is clicked', () => {
+    const mockDispatch = vi.fn();
+
+    const firstField = INITIAL_SCHEMA.fields[0];
+    const secondField = INITIAL_SCHEMA.fields[1];
+
+    render(
+      <SchemaDispatchContext.Provider value={mockDispatch}>
+        <EditorContent
+          schema={{ title: 'Form', fields: [firstField, secondField] }}
+        />
+      </SchemaDispatchContext.Provider>
+    );
+
+    const moveUpButton = screen.getByTestId('move-up-field-button-1');
+    fireEvent.click(moveUpButton);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: ACTION_TYPE_MOVE_UP_FIELD,
+      field: secondField,
+    });
+  });
+
+  test('should move down field when move down button is clicked', () => {
+    const mockDispatch = vi.fn();
+
+    const firstField = INITIAL_SCHEMA.fields[0];
+    const secondField = INITIAL_SCHEMA.fields[1];
+
+    render(
+      <SchemaDispatchContext.Provider value={mockDispatch}>
+        <EditorContent
+          schema={{ title: 'Form', fields: [firstField, secondField] }}
+        />
+      </SchemaDispatchContext.Provider>
+    );
+
+    const moveDownButton = screen.getByTestId('move-down-field-button-0');
+    fireEvent.click(moveDownButton);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: ACTION_TYPE_MOVE_DOWN_FIELD,
+      field: firstField,
     });
   });
 });
