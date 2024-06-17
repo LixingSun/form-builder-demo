@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import {
   ACTION_TYPE_ADD_FIELD,
+  ACTION_TYPE_INIT_SCHEMA,
   INITIAL_SCHEMA,
   SchemaProvider,
   schemaReducer,
@@ -21,6 +22,16 @@ describe('SchemaContext', () => {
   });
 
   describe('schemaReducer', () => {
+    test('should handle schema initialization', () => {
+      const newSchema = { title: 'New Schema', fields: [] };
+      const actualNewSchema = schemaReducer(INITIAL_SCHEMA, {
+        type: ACTION_TYPE_INIT_SCHEMA,
+        schema: newSchema,
+      });
+
+      expect(actualNewSchema).toEqual(newSchema);
+    });
+
     test('should handle field addition', () => {
       const newField = { id: 1 };
       const expectedNewSchema = {
