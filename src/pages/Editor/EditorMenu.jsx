@@ -38,6 +38,8 @@ EditorMenuItem.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
 
+const fieldTypes = Object.keys(FIELD_TYPES);
+
 export default function EditorMenu() {
   const [isFieldCreationOpen, setIsFieldCreationOpen] = useState(false);
   const [fieldCreationType, setFieldCreationType] = useState(
@@ -57,17 +59,21 @@ export default function EditorMenu() {
       </Typography>
 
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={12} lg={6}>
-          <EditorMenuItem
-            name={'Text Field'}
-            id="text-field-menu-item"
-            icon={FIELD_TYPE_ICON_MAPPING[FIELD_TYPES.textField]}
-            onClick={() => {
-              setFieldCreationType(FIELD_TYPES.textField);
-              setIsFieldCreationOpen(true);
-            }}
-          />
-        </Grid>
+        {fieldTypes.map((fieldType) => {
+          return (
+            <Grid item key={fieldType} xs={12} sm={6} md={12} lg={6}>
+              <EditorMenuItem
+                id={`${fieldType}-menu-item`}
+                name={FIELD_TYPE_NAME_MAPPING[FIELD_TYPES[fieldType]]}
+                icon={FIELD_TYPE_ICON_MAPPING[FIELD_TYPES[fieldType]]}
+                onClick={() => {
+                  setFieldCreationType(FIELD_TYPES[fieldType]);
+                  setIsFieldCreationOpen(true);
+                }}
+              />
+            </Grid>
+          );
+        })}
       </Grid>
 
       <FieldDialog

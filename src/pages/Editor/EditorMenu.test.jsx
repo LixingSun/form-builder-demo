@@ -22,7 +22,7 @@ describe('EditorMenu', () => {
     render(<EditorMenu />);
 
     const menuItem = screen
-      .getByTestId('text-field-menu-item')
+      .getByTestId(`${FIELD_TYPES.textField}-menu-item`)
       .querySelector('button');
     fireEvent.click(menuItem);
 
@@ -36,7 +36,7 @@ describe('EditorMenu', () => {
     render(<EditorMenu />);
 
     const menuItem = screen
-      .getByTestId('text-field-menu-item')
+      .getByTestId(`${FIELD_TYPES.textField}-menu-item`)
       .querySelector('button');
     fireEvent.click(menuItem);
 
@@ -60,7 +60,7 @@ describe('EditorMenu', () => {
     );
 
     const menuItem = screen
-      .getByTestId('text-field-menu-item')
+      .getByTestId(`${FIELD_TYPES.textField}-menu-item`)
       .querySelector('button');
     fireEvent.click(menuItem);
 
