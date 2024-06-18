@@ -139,5 +139,13 @@ export const getFieldConfig = (fieldType, initialValues) => {
           <RequiredConfig {...getDefaultValue('isRequired')} />
         </>
       );
+    case FIELD_TYPES.email:
+      return (
+        <>
+          <TitleConfig {...getDefaultValue('title')} />
+          <DescriptionConfig {...getDefaultValue('description')} />
+          <RequiredConfig {...getDefaultValue('isRequired')} />
+        </>
+      );
   }
 };

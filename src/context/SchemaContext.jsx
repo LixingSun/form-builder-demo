@@ -27,6 +27,24 @@ export const INITIAL_SCHEMA = {
       required: true,
       maxLength: null,
     },
+    {
+      id: '3',
+      type: FIELD_TYPES.number,
+      key: 'age',
+      title: 'Age',
+      description: 'Please enter your age',
+      required: false,
+      maxLength: null,
+    },
+    {
+      id: '4',
+      type: FIELD_TYPES.email,
+      key: 'email',
+      title: 'Email',
+      description: 'Please enter your Email',
+      required: false,
+      maxLength: null,
+    },
   ],
 };
 
