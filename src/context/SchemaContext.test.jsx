@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import {
   ACTION_TYPE_INIT_SCHEMA,
+  ACTION_TYPE_RESET_SCHEMA,
   ACTION_TYPE_ADD_FIELD,
   ACTION_TYPE_EDIT_FIELD,
   ACTION_TYPE_DELETE_FIELD,
@@ -55,6 +56,17 @@ describe('SchemaContext', () => {
       expect(actualNewSchema).toEqual(newSchema);
 
       vi.restoreAllMocks();
+    });
+
+    test('should handle schema reset', () => {
+      const updatedSchema = schemaReducer(
+        { ...INITIAL_SCHEMA, title: 'Test' },
+        {
+          type: ACTION_TYPE_RESET_SCHEMA,
+        }
+      );
+
+      expect(updatedSchema).toEqual(INITIAL_SCHEMA);
     });
 
     test('should handle field addition', () => {
