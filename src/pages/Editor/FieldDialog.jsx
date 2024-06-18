@@ -18,9 +18,17 @@ const formatFormJson = (formJson) => {
     isRequired: formJson.isRequired == 'on',
   };
 
-  if ('maxLength' in formattedFormJson && formattedFormJson.maxLength == '') {
-    formattedFormJson.maxLength = null;
-  }
+  const numericFieldKeys = ['maxLength', 'maxValue', 'minValue'];
+
+  numericFieldKeys.forEach((numericFieldKey) => {
+    if (
+      numericFieldKey in formattedFormJson &&
+      formattedFormJson[numericFieldKey] == ''
+    ) {
+      formattedFormJson[numericFieldKey] = null;
+    }
+  });
+
   return formattedFormJson;
 };
 

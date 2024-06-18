@@ -20,7 +20,7 @@ describe('PreviewField', () => {
     title: 'Text Field Title',
     key: 'textFieldTitle',
     description: 'Text Field Description',
-    required: true,
+    isRequired: true,
     maxLength: null,
   };
 
@@ -30,9 +30,18 @@ describe('PreviewField', () => {
     title: 'Number Field Title',
     key: 'numberFieldTitle',
     description: 'Number Field Description',
-    required: true,
+    isRequired: true,
     minValue: 0,
     maxValue: 100,
+  };
+
+  const mockEmailField = {
+    id: 2,
+    type: FIELD_TYPES.email,
+    title: 'Email Field Title',
+    key: 'emailFieldTitle',
+    description: 'Email Field Description',
+    isRequired: true,
   };
 
   describe('PreviewTextField', () => {
@@ -183,6 +192,83 @@ describe('PreviewField', () => {
 
       const fieldInput = screen
         .getByTestId(`field-${mockNumberField.id}`)
+        .querySelector('input');
+      fireEvent.blur(fieldInput);
+      expect(mockHandleBlur).toHaveBeenCalled();
+    });
+  });
+
+  describe('PreviewEmailField', () => {
+    test('should show error when the field is touched and has error', () => {
+      const mockError = 'some error to display';
+      renderField(mockEmailField, {
+        touched: true,
+        error: mockError,
+        handleChange: () => {},
+        handleBlur: () => {},
+      });
+
+      const errorMsg = screen.getByText(mockError);
+      expect(errorMsg).toBeInTheDocument();
+    });
+
+    test('should not show error when the field is touched and has no error', () => {
+      renderField(mockEmailField, {
+        touched: true,
+        error: undefined,
+        handleChange: () => {},
+        handleBlur: () => {},
+      });
+
+      const errorMsg = screen
+        .getByTestId(`field-${mockEmailField.id}`)
+        .querySelector(`#field-${mockEmailField.id}-helper-text`);
+      expect(errorMsg).toBeNull();
+    });
+
+    test('should not show error when the field is not touched', () => {
+      const mockError = 'some error to display';
+
+      renderField(mockEmailField, {
+        touched: false,
+        error: mockError,
+        handleChange: () => {},
+        handleBlur: () => {},
+      });
+
+      const errorMsg = screen.queryByText(mockError);
+      expect(errorMsg).toBeNull();
+    });
+
+    test('should trigger handleChange when the field is changed', () => {
+      const mockHandleChange = vi.fn();
+
+      renderField(mockEmailField, {
+        touched: true,
+        error: undefined,
+        handleChange: mockHandleChange,
+        handleBlur: () => {},
+      });
+
+      const fieldInput = screen
+        .getByTestId(`field-${mockEmailField.id}`)
+        .querySelector('input');
+      fireEvent.change(fieldInput, { target: { value: 10 } });
+      expect(mockHandleChange).toHaveBeenCalled();
+    });
+
+    test('should trigger handleBlur when the field is blurred', () => {
+      const mockHandleBlur = vi.fn();
+
+      renderField(mockEmailField, {
+        touched: true,
+        error: undefined,
+        handleChange: () => {},
+        handleBlur: mockHandleBlur,
+      });
+
+      const fieldInput = screen
+        .getByTestId(`field-${mockEmailField.id}`)
         .querySelector('input');
       fireEvent.blur(fieldInput);
       expect(mockHandleBlur).toHaveBeenCalled();

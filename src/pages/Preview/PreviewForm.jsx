@@ -16,6 +16,9 @@ const generateInitFormValues = (fields) => {
       case FIELD_TYPES.number:
         formValues[field.key] = null;
         return;
+      case FIELD_TYPES.email:
+        formValues[field.key] = '';
+        return;
       default:
         throw Error('Unknown field type: ' + field.type);
     }
@@ -41,7 +44,7 @@ const generateValidationSchema = (fields) => {
         }
         break;
       case FIELD_TYPES.number:
-        validators = yup.number();
+        validators = yup.number().nullable();
         if (field.isRequired) {
           validators = validators.required('This field is required.');
         }
@@ -56,6 +59,12 @@ const generateValidationSchema = (fields) => {
             field.maxValue,
             `The maximum acceptable value is ${field.maxValue}.`
           );
+        }
+        break;
+      case FIELD_TYPES.email:
+        validators = yup.string().email('The email format is invalid');
+        if (field.isRequired) {
+          validators = validators.required('This field is required.');
         }
         break;
       default:

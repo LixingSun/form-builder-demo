@@ -28,7 +28,7 @@ describe('EditorContent', () => {
   test('should render every field for editing', () => {
     renderEditor();
     INITIAL_SCHEMA.fields.forEach((field) => {
-      const element = screen.getByText(field.title);
+      const element = screen.getByText(new RegExp(field.title));
       expect(element).toBeInTheDocument();
     });
   });

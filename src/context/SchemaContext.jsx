@@ -15,7 +15,7 @@ export const INITIAL_SCHEMA = {
       key: 'firstName',
       title: 'First Name',
       description: 'Please enter your first name',
-      required: true,
+      isRequired: true,
       maxLength: null,
     },
     {
@@ -24,7 +24,7 @@ export const INITIAL_SCHEMA = {
       key: 'lastName',
       title: 'Last Name',
       description: 'Please enter your last name',
-      required: true,
+      isRequired: true,
       maxLength: null,
     },
     {
@@ -33,8 +33,9 @@ export const INITIAL_SCHEMA = {
       key: 'age',
       title: 'Age',
       description: 'Please enter your age',
-      required: false,
-      maxLength: null,
+      isRequired: false,
+      minValue: '1',
+      maxValue: '150',
     },
     {
       id: '4',
@@ -42,8 +43,7 @@ export const INITIAL_SCHEMA = {
       key: 'email',
       title: 'Email',
       description: 'Please enter your Email',
-      required: false,
-      maxLength: null,
+      isRequired: false,
     },
   ],
 };
