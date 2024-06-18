@@ -13,6 +13,9 @@ const generateInitFormValues = (fields) => {
       case FIELD_TYPES.textField:
         formValues[field.key] = '';
         return;
+      case FIELD_TYPES.number:
+        formValues[field.key] = null;
+        return;
       default:
         throw Error('Unknown field type: ' + field.type);
     }
@@ -30,10 +33,28 @@ const generateValidationSchema = (fields) => {
         if (field.isRequired) {
           validators = validators.required('This field is required.');
         }
-        if (field.maxLength) {
+        if (field.maxLength !== null) {
           validators = validators.max(
             field.maxLength,
             `This field must be at most ${field.maxLength} characters.`
+          );
+        }
+        break;
+      case FIELD_TYPES.number:
+        validators = yup.number();
+        if (field.isRequired) {
+          validators = validators.required('This field is required.');
+        }
+        if (field.minValue !== null) {
+          validators = validators.min(
+            field.minValue,
+            `The minimum acceptable value is ${field.minValue}.`
+          );
+        }
+        if (field.maxValue !== null) {
+          validators = validators.max(
+            field.maxValue,
+            `The maximum acceptable value is ${field.maxValue}.`
           );
         }
         break;

@@ -21,8 +21,41 @@ function PreviewTextField({ field, touched, error, handleChange, handleBlur }) {
     />
   );
 }
-
 PreviewTextField.propTypes = {
+  field: PropTypes.object.isRequired,
+  touched: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  handleChange: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func.isRequired,
+};
+
+function PreviewNumberField({
+  field,
+  touched,
+  error,
+  handleChange,
+  handleBlur,
+}) {
+  return (
+    <TextField
+      required={field.isRequired}
+      placeholder={field.description}
+      margin="dense"
+      type="number"
+      id={`field-${field.id}`}
+      data-testid={`field-${field.id}`}
+      name={field.key}
+      label={field.title}
+      fullWidth
+      variant="outlined"
+      onChange={handleChange}
+      onBlur={handleBlur}
+      error={touched && Boolean(error)}
+      helperText={touched && error}
+    />
+  );
+}
+PreviewNumberField.propTypes = {
   field: PropTypes.object.isRequired,
   touched: PropTypes.bool.isRequired,
   error: PropTypes.string,
@@ -41,6 +74,16 @@ export default function PreviewField({
     case FIELD_TYPES.textField:
       return (
         <PreviewTextField
+          field={field}
+          touched={touched}
+          error={error}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+        />
+      );
+    case FIELD_TYPES.number:
+      return (
+        <PreviewNumberField
           field={field}
           touched={touched}
           error={error}
