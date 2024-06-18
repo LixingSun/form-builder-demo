@@ -96,6 +96,25 @@ MinValueConfig.propTypes = {
   defaultValue: PropTypes.string,
 };
 
+function OptionsConfig({ defaultValue }) {
+  return (
+    <TextField
+      margin="dense"
+      id="field-options-config"
+      data-testid="field-options-config"
+      name="options"
+      label="Options"
+      fullWidth
+      variant="standard"
+      defaultValue={defaultValue}
+      helperText="Enter options separated by commas (e.g. option1,option2,option3)."
+    />
+  );
+}
+OptionsConfig.propTypes = {
+  defaultValue: PropTypes.string,
+};
+
 function RequiredConfig({ defaultValue }) {
   return (
     <FormControlLabel
@@ -144,6 +163,15 @@ export const getFieldConfig = (fieldType, initialValues) => {
         <>
           <TitleConfig {...getDefaultValue('title')} />
           <DescriptionConfig {...getDefaultValue('description')} />
+          <RequiredConfig {...getDefaultValue('isRequired')} />
+        </>
+      );
+    case FIELD_TYPES.dropdown:
+      return (
+        <>
+          <TitleConfig {...getDefaultValue('title')} />
+          <DescriptionConfig {...getDefaultValue('description')} />
+          <OptionsConfig {...getDefaultValue('options')} />
           <RequiredConfig {...getDefaultValue('isRequired')} />
         </>
       );

@@ -45,6 +45,15 @@ export const INITIAL_SCHEMA = {
       description: 'Please enter your Email',
       isRequired: false,
     },
+    {
+      id: '5',
+      type: FIELD_TYPES.dropdown,
+      key: 'nationality',
+      title: 'Nationality',
+      description: 'Please select your nationality',
+      isRequired: false,
+      options: 'China,United States,Canada,Australia,South Africa,Others',
+    },
   ],
 };
 

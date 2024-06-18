@@ -32,4 +32,14 @@ describe('getFieldConfig', () => {
     expect(screen.getByTestId('field-description-config')).toBeInTheDocument();
     expect(screen.getByTestId('field-required-config')).toBeInTheDocument();
   });
+
+  test('should generate correct config fields for dropdown field', () => {
+    const ConfigFields = getFieldConfig(FIELD_TYPES.dropdown);
+    render(ConfigFields);
+
+    expect(screen.getByTestId('field-title-config')).toBeInTheDocument();
+    expect(screen.getByTestId('field-description-config')).toBeInTheDocument();
+    expect(screen.getByTestId('field-options-config')).toBeInTheDocument();
+    expect(screen.getByTestId('field-required-config')).toBeInTheDocument();
+  });
 });
