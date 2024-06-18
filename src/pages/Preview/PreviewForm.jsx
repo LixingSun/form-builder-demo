@@ -19,6 +19,9 @@ const generateInitFormValues = (fields) => {
       case FIELD_TYPES.email:
         formValues[field.key] = '';
         return;
+      case FIELD_TYPES.dropdown:
+        formValues[field.key] = '';
+        return;
       default:
         throw Error('Unknown field type: ' + field.type);
     }
@@ -67,6 +70,12 @@ const generateValidationSchema = (fields) => {
           validators = validators.required('This field is required.');
         }
         break;
+      case FIELD_TYPES.dropdown:
+        validators = yup.string();
+        if (field.isRequired) {
+          validators = validators.required('This field is required.');
+        }
+        break;
       default:
         throw Error('Unknown field type: ' + field.type);
     }
@@ -92,9 +101,17 @@ export default function PreviewForm({ schema }) {
         alert(JSON.stringify(values, null, 2));
       }}
     >
-      {({ errors, touched, handleSubmit, handleChange, handleBlur }) => (
+      {({
+        errors,
+        touched,
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        setTouched,
+      }) => (
         <Box
           component="form"
+          data-testid="preview-form"
           sx={{ flexGrow: 1, bgcolor: '#eeeeee' }}
           noValidate
           autoComplete="off"
@@ -117,6 +134,7 @@ export default function PreviewForm({ schema }) {
                       error={errors[field.key]}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
+                      setTouched={setTouched}
                     />
                   </Grid>
                 ))}

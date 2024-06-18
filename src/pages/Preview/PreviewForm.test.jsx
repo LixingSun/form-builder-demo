@@ -218,6 +218,52 @@ describe('PreviewForm', () => {
     });
   });
 
+  describe('Dropdown Field', () => {
+    const mockDropdownField = {
+      id: 0,
+      type: FIELD_TYPES.dropdown,
+      title: 'Dropdown Field Title',
+      key: 'dropdownFieldTitle',
+      description: 'Dropdown Field Description',
+      options: 'option1,option2,option3',
+      isRequired: true,
+    };
+
+    test('should render dropdown field title', () => {
+      mockSchema = {
+        fields: [mockDropdownField],
+      };
+
+      render(<PreviewForm schema={mockSchema} />);
+
+      const titleElements = screen.getAllByText(mockSchema.fields[0].title);
+      expect(titleElements.length).not.toEqual(0);
+    });
+
+    test('should show error when the field is required and no option is selected after touching', async () => {
+      mockSchema = {
+        fields: [mockDropdownField],
+      };
+
+      render(<PreviewForm schema={mockSchema} />);
+
+      const fieldInput = screen
+        .getByTestId(`field-${mockDropdownField.id}`)
+        .querySelector('[role=combobox]');
+      fireEvent.click(fieldInput);
+      fireEvent.click(screen.getByTestId('preview-form'));
+
+      waitFor(() => {
+        const errorMsg = screen
+          .getByTestId(`field-${mockDropdownField.id}`)
+          .querySelector(
+            `#field-${mockDropdownField.id}-helper-text.Mui-Error`
+          );
+        expect(errorMsg).toBeInTheDocument();
+      });
+    });
+  });
+
   test('should throw error for unhandled field type', () => {
     mockSchema = {
       fields: [{ type: 'unknown' }],

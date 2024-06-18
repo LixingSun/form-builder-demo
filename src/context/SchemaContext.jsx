@@ -52,7 +52,7 @@ export const INITIAL_SCHEMA = {
       title: 'Nationality',
       description: 'Please select your nationality',
       isRequired: false,
-      options: 'China,United States,Canada,Australia,South Africa,Others',
+      options: 'Chinese,American,Canadian,Australian,South African,Others',
     },
   ],
 };
