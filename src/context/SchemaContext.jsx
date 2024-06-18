@@ -6,8 +6,8 @@ const LOCALSTORAGE_KEY_SCHEMA = 'form-builder-demo-schema';
 
 export const INITIAL_SCHEMA = {
   title: 'Test Form',
-  // description:
-  //   'Welcome to Form Builder Demo. Feel free to play around and create your own form.',
+  description:
+    'Welcome to Form Builder Demo. Feel free to play around and create your own form.',
   fields: [
     {
       id: '1',
