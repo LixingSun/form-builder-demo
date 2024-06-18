@@ -57,7 +57,7 @@ export default function EditorMenu() {
       </Typography>
 
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6} md={12} lg={6}>
           <EditorMenuItem
             name={'Text Field'}
             id="text-field-menu-item"

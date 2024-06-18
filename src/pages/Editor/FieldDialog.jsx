@@ -6,9 +6,9 @@ import {
   Button,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-
-import { getFieldConfig } from './fieldConfig';
 import { v4 as uuidv4 } from 'uuid';
+import { getFieldConfig } from './fieldConfig';
+import { toCamelCase } from '@/utils/stringUtils';
 
 const formatFormJson = (formJson) => {
   let formattedFormJson = structuredClone(formJson);
@@ -50,6 +50,7 @@ export default function FieldDialog({
           const formattedFormJson = formatFormJson({
             id: initialValues ? initialValues.id : newFieldId,
             type: fieldType,
+            key: toCamelCase(formJson.title),
             ...formJson,
           });
           onSubmit(formattedFormJson);

@@ -12,6 +12,7 @@ export const INITIAL_SCHEMA = {
     {
       id: '1',
       type: FIELD_TYPES.textField,
+      key: 'firstName',
       title: 'First Name',
       description: 'Please enter your first name',
       required: true,
@@ -20,6 +21,7 @@ export const INITIAL_SCHEMA = {
     {
       id: '2',
       type: FIELD_TYPES.textField,
+      key: 'lastName',
       title: 'Last Name',
       description: 'Please enter your last name',
       required: true,

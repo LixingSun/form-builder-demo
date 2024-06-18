@@ -83,6 +83,7 @@ describe('FieldDialog', () => {
     expect(mockOnSubmitCallback).toHaveBeenCalledWith({
       id: mockUuid,
       title: mockTitle,
+      key: mockTitle.toLowerCase(),
       type: FIELD_TYPES.textField,
       description: '',
       maxLength: null,

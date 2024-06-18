@@ -20,6 +20,7 @@ describe('Preview', () => {
     id: 0,
     type: FIELD_TYPES.textField,
     title: 'Text Field Title',
+    key: 'textFieldTitle',
     description: 'Text Field Description',
     required: true,
     maxLength: null,
