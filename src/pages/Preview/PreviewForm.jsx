@@ -4,6 +4,7 @@ import { PropTypes } from 'prop-types';
 import { Box, Container, Paper, Grid, Typography, Button } from '@mui/material';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
 import PreviewField from './PreviewField';
+import { useMemo } from 'react';
 
 const generateInitFormValues = (fields) => {
   let formValues = {};
@@ -45,10 +46,18 @@ const generateValidationSchema = (fields) => {
 };
 
 export default function PreviewForm({ schema }) {
+  const { initialValues, validationSchema } = useMemo(() => {
+    const { fields } = schema;
+    return {
+      initialValues: generateInitFormValues(fields),
+      validationSchema: generateValidationSchema(fields),
+    };
+  }, [schema]);
+
   return (
     <Formik
-      initialValues={generateInitFormValues(schema.fields)}
-      validationSchema={generateValidationSchema(schema.fields)}
+      initialValues={initialValues}
+      validationSchema={validationSchema}
       onSubmit={(values) => {
         alert(JSON.stringify(values, null, 2));
       }}

@@ -9,6 +9,7 @@ function PreviewTextField({ field, touched, error, handleChange, handleBlur }) {
       placeholder={field.description}
       margin="dense"
       id={`field-${field.id}`}
+      data-testid={`field-${field.id}`}
       name={field.key}
       label={field.title}
       fullWidth
