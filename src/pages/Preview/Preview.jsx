@@ -1,13 +1,26 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { GitHub as GithubIcon } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import { SchemaContext } from '@/context/SchemaContext';
+import {
+  ScreenLoadingDispatchContext,
+  ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+} from '@/context/ScreenLoadingContext';
 import PreviewForm from './PreviewForm';
 
 export function Preview() {
   const schema = useContext(SchemaContext);
+
+  const isLoadingDispatch = useContext(ScreenLoadingDispatchContext);
+
+  useEffect(() => {
+    isLoadingDispatch({
+      type: ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+      value: false,
+    });
+  }, [isLoadingDispatch]);
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

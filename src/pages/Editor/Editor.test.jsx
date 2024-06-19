@@ -8,13 +8,16 @@ import {
   ACTION_TYPE_RESET_SCHEMA,
 } from '@/context/SchemaContext';
 import { vi } from 'vitest';
+import { ScreenLoadingProvider } from '@/context/ScreenLoadingContext';
 
 const renderWithContext = (schema = INITIAL_SCHEMA, dispatch = () => {}) => {
   render(
     <BrowserRouter>
       <SchemaContext.Provider value={schema}>
         <SchemaDispatchContext.Provider value={dispatch}>
-          <Editor />
+          <ScreenLoadingProvider>
+            <Editor />
+          </ScreenLoadingProvider>
         </SchemaDispatchContext.Provider>
       </SchemaContext.Provider>
     </BrowserRouter>

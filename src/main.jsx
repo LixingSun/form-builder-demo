@@ -8,6 +8,7 @@ import '@fontsource/roboto/700.css';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { SchemaProvider } from '@/context/SchemaContext';
+import { ScreenLoadingProvider } from '@/context/ScreenLoadingContext';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CssBaseline />
     <SchemaProvider>
-      <RouterProvider router={router} />
+      <ScreenLoadingProvider>
+        <RouterProvider router={router} />
+      </ScreenLoadingProvider>
     </SchemaProvider>
   </React.StrictMode>
 );

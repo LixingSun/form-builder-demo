@@ -1,19 +1,34 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, Grid } from '@mui/material';
 import {
   Preview as PreviewIcon,
   SettingsBackupRestore as ResetIcon,
   GitHub as GithubIcon,
 } from '@mui/icons-material';
-import { SchemaContext, SchemaDispatchContext } from '@/context/SchemaContext';
+import {
+  SchemaContext,
+  SchemaDispatchContext,
+  ACTION_TYPE_RESET_SCHEMA,
+} from '@/context/SchemaContext';
+import {
+  ScreenLoadingDispatchContext,
+  ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+} from '@/context/ScreenLoadingContext';
 import EditorMenu from './EditorMenu';
 import EditorContent from './EditorContent';
-import { Link } from 'react-router-dom';
-import { ACTION_TYPE_RESET_SCHEMA } from '../../context/SchemaContext';
 
 export function Editor() {
   const schema = useContext(SchemaContext);
-  const dispatch = useContext(SchemaDispatchContext);
+  const schemaDispatch = useContext(SchemaDispatchContext);
+  const isLoadingDispatch = useContext(ScreenLoadingDispatchContext);
+
+  useEffect(() => {
+    isLoadingDispatch({
+      type: ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+      value: false,
+    });
+  }, [isLoadingDispatch]);
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -36,7 +51,7 @@ export function Editor() {
             endIcon={<ResetIcon />}
             sx={{ color: 'primary.contrastText' }}
             onClick={() => {
-              dispatch({
+              schemaDispatch({
                 type: ACTION_TYPE_RESET_SCHEMA,
               });
             }}
@@ -48,6 +63,12 @@ export function Editor() {
             to="/preview"
             endIcon={<PreviewIcon />}
             sx={{ color: 'primary.contrastText' }}
+            onClick={() => {
+              isLoadingDispatch({
+                type: ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+                value: true,
+              });
+            }}
           >
             Preview
           </Button>
