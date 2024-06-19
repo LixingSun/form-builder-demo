@@ -137,6 +137,7 @@ function PreviewDropdownField({
       </Select>
       <FormHelperText
         id={`field-${field.id}-helper-text`}
+        data-testid={`field-${field.id}-helper-text`}
         error={touched && Boolean(error)}
       >
         {touched && error ? error : field.description}

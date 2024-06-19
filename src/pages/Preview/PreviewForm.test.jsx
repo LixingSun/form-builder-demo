@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import PreviewForm from './PreviewForm';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
+import { expect } from 'vitest';
 
 describe('PreviewForm', () => {
   let mockSchema;
@@ -39,7 +40,7 @@ describe('PreviewForm', () => {
         .querySelector('input');
       fireEvent.blur(fieldInput);
 
-      waitFor(() => {
+      await waitFor(() => {
         const errorMsg = screen
           .getByTestId(`field-${mockTextField.id}`)
           .querySelector(`#field-${mockTextField.id}-helper-text`);
@@ -60,7 +61,7 @@ describe('PreviewForm', () => {
       fireEvent.change(fieldInput, { target: { value: 'over' } });
       fireEvent.blur(fieldInput);
 
-      waitFor(() => {
+      await waitFor(() => {
         const errorMsg = screen
           .getByTestId(`field-${mockTextField.id}`)
           .querySelector(`#field-${mockTextField.id}-helper-text`);
@@ -104,7 +105,7 @@ describe('PreviewForm', () => {
         .querySelector('input');
       fireEvent.blur(fieldInput);
 
-      waitFor(() => {
+      await waitFor(() => {
         const errorMsg = screen
           .getByTestId(`field-${mockNumberField.id}`)
           .querySelector(`#field-${mockNumberField.id}-helper-text`);
@@ -125,7 +126,7 @@ describe('PreviewForm', () => {
       fireEvent.change(fieldInput, { target: { value: 20 } });
       fireEvent.blur(fieldInput);
 
-      waitFor(() => {
+      await waitFor(() => {
         const errorMsg = screen
           .getByTestId(`field-${mockNumberField.id}`)
           .querySelector(`#field-${mockNumberField.id}-helper-text`);
@@ -146,7 +147,7 @@ describe('PreviewForm', () => {
       fireEvent.change(fieldInput, { target: { value: 0 } });
       fireEvent.blur(fieldInput);
 
-      waitFor(() => {
+      await waitFor(() => {
         const errorMsg = screen
           .getByTestId(`field-${mockNumberField.id}`)
           .querySelector(`#field-${mockNumberField.id}-helper-text`);
@@ -188,7 +189,7 @@ describe('PreviewForm', () => {
         .querySelector('input');
       fireEvent.blur(fieldInput);
 
-      waitFor(() => {
+      await waitFor(() => {
         const errorMsg = screen
           .getByTestId(`field-${mockEmailField.id}`)
           .querySelector(`#field-${mockEmailField.id}-helper-text`);
@@ -209,7 +210,7 @@ describe('PreviewForm', () => {
       fireEvent.change(fieldInput, { target: { value: 'invalidemail' } });
       fireEvent.blur(fieldInput);
 
-      waitFor(() => {
+      await waitFor(() => {
         const errorMsg = screen
           .getByTestId(`field-${mockEmailField.id}`)
           .querySelector(`#field-${mockEmailField.id}-helper-text`);
@@ -250,16 +251,19 @@ describe('PreviewForm', () => {
       const fieldInput = screen
         .getByTestId(`field-${mockDropdownField.id}`)
         .querySelector('[role=combobox]');
-      fireEvent.click(fieldInput);
-      fireEvent.click(screen.getByTestId('preview-form'));
+      fireEvent.mouseDown(fieldInput);
 
-      waitFor(() => {
-        const errorMsg = screen
-          .getByTestId(`field-${mockDropdownField.id}`)
-          .querySelector(
-            `#field-${mockDropdownField.id}-helper-text.Mui-Error`
-          );
-        expect(errorMsg).toBeInTheDocument();
+      const modalBackdrop = screen
+        .getByRole('presentation')
+        .querySelector('.MuiModal-backdrop');
+      fireEvent.click(modalBackdrop);
+
+      await waitFor(() => {
+        const helperText = screen.getByTestId(
+          `field-${mockDropdownField.id}-helper-text`
+        );
+
+        expect(helperText).toHaveClass('Mui-error');
       });
     });
   });
