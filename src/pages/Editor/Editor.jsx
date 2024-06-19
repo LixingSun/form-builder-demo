@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Box, Grid } from '@mui/material';
 import {
   Preview as PreviewIcon,
   SettingsBackupRestore as ResetIcon,
+  GitHub as GithubIcon,
 } from '@mui/icons-material';
 import { SchemaContext, SchemaDispatchContext } from '@/context/SchemaContext';
 import EditorMenu from './EditorMenu';
@@ -18,10 +19,19 @@ export default function Editor() {
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ marginRight: 2 }}>
             Form Builder Demo
           </Typography>
-
+          <a
+            href="https://github.com/LixingSun/form-builder-demo/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GithubIcon
+              sx={{ display: 'block', color: 'primary.contrastText' }}
+            />
+          </a>
+          <div style={{ flexGrow: 1 }}></div>
           <Button
             endIcon={<ResetIcon />}
             sx={{ color: 'primary.contrastText' }}
@@ -33,14 +43,14 @@ export default function Editor() {
           >
             Reset
           </Button>
-          <Link to="preview">
-            <Button
-              endIcon={<PreviewIcon />}
-              sx={{ color: 'primary.contrastText' }}
-            >
-              Preview
-            </Button>
-          </Link>
+          <Button
+            component={Link}
+            to="/preview"
+            endIcon={<PreviewIcon />}
+            sx={{ color: 'primary.contrastText' }}
+          >
+            Preview
+          </Button>
         </Toolbar>
       </AppBar>
 
