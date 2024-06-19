@@ -8,6 +8,7 @@ import {
   ACTION_TYPE_DELETE_FIELD,
   ACTION_TYPE_MOVE_UP_FIELD,
   ACTION_TYPE_MOVE_DOWN_FIELD,
+  ACTION_TYPE_UPDATE_FORM_SETTINGS,
   INITIAL_SCHEMA,
   SchemaProvider,
   schemaReducer,
@@ -127,6 +128,22 @@ describe('SchemaContext', () => {
       });
 
       expect(updatedSchema.fields[1].title).toEqual(targetFieldTitle);
+    });
+
+    test('should handle form settings modification', () => {
+      const title = 'New Form Title';
+      const description = 'New Form Title';
+
+      const updatedSchema = schemaReducer(INITIAL_SCHEMA, {
+        type: ACTION_TYPE_UPDATE_FORM_SETTINGS,
+        settings: {
+          title,
+          description,
+        },
+      });
+
+      expect(updatedSchema.title).toEqual(title);
+      expect(updatedSchema.description).toEqual(description);
     });
 
     test('should throw error for unhandled action type', () => {

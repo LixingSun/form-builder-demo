@@ -8,6 +8,7 @@ import {
   Stack,
   Grid,
   IconButton,
+  CardActionArea,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -26,22 +27,25 @@ import {
   ACTION_TYPE_DELETE_FIELD,
   ACTION_TYPE_MOVE_UP_FIELD,
   ACTION_TYPE_MOVE_DOWN_FIELD,
+  ACTION_TYPE_UPDATE_FORM_SETTINGS,
   SchemaDispatchContext,
 } from '@/context/SchemaContext';
+import FormTitleDialog from './FormTitleDialog';
 
 export default function EditorContent({ schema }) {
-  const [isFieldEdittingOpen, setIsFieldEdittingOpen] = useState(false);
-  const [fieldEdittingType, setFieldEdittingType] = useState(
+  const [isFieldEditingOpen, setIsFieldEditingOpen] = useState(false);
+  const [fieldEditingType, setFieldEditingType] = useState(
     FIELD_TYPES.textField
   );
-  const [fieldEdittingInitialValues, setFieldEdittingInitialValues] =
+  const [fieldEditingInitialValues, setFieldEditingInitialValues] =
     useState(null);
+  const [isFormEditingOpen, setIsFormEditingOpen] = useState(false);
   const dispatch = useContext(SchemaDispatchContext);
 
   const handleEditField = (field) => {
-    setFieldEdittingType(field.type);
-    setIsFieldEdittingOpen(true);
-    setFieldEdittingInitialValues(field);
+    setFieldEditingType(field.type);
+    setIsFieldEditingOpen(true);
+    setFieldEditingInitialValues(field);
   };
 
   const handleDeleteField = (field) => {
@@ -60,9 +64,21 @@ export default function EditorContent({ schema }) {
     <>
       <Container maxWidth="sm" sx={{ paddingTop: 4 }}>
         <Stack spacing={2}>
-          <Typography variant="h6" component="div">
-            {schema.title}
-          </Typography>
+          <Card>
+            <CardActionArea
+              data-testid="form-title-action-area"
+              onClick={() => {
+                setIsFormEditingOpen(true);
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" component="div" gutterBottom>
+                  {schema.title}
+                </Typography>
+                <Typography component="div">{schema.description}</Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
 
           {schema.fields.map((field, index) => {
             const FieldIcon = FIELD_TYPE_ICON_MAPPING[FIELD_TYPES[field.type]];
@@ -137,17 +153,30 @@ export default function EditorContent({ schema }) {
       </Container>
 
       <FieldDialog
-        open={isFieldEdittingOpen}
-        fieldType={fieldEdittingType}
-        fieldDisplayName={FIELD_TYPE_NAME_MAPPING[fieldEdittingType]}
-        initialValues={fieldEdittingInitialValues}
-        onClose={() => setIsFieldEdittingOpen(false)}
+        open={isFieldEditingOpen}
+        fieldType={fieldEditingType}
+        fieldDisplayName={FIELD_TYPE_NAME_MAPPING[fieldEditingType]}
+        initialValues={fieldEditingInitialValues}
+        onClose={() => setIsFieldEditingOpen(false)}
         onSubmit={(formData) => {
           dispatch({
             type: ACTION_TYPE_EDIT_FIELD,
             field: formData,
           });
-          setIsFieldEdittingOpen(false);
+          setIsFieldEditingOpen(false);
+        }}
+      />
+
+      <FormTitleDialog
+        open={isFormEditingOpen}
+        initialValues={{ title: schema.title, description: schema.description }}
+        onClose={() => setIsFormEditingOpen(false)}
+        onSubmit={(formData) => {
+          dispatch({
+            type: ACTION_TYPE_UPDATE_FORM_SETTINGS,
+            settings: formData,
+          });
+          setIsFormEditingOpen(false);
         }}
       />
     </>

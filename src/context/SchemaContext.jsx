@@ -67,6 +67,7 @@ export const ACTION_TYPE_EDIT_FIELD = 'editField';
 export const ACTION_TYPE_DELETE_FIELD = 'deleteField';
 export const ACTION_TYPE_MOVE_UP_FIELD = 'moveUpField';
 export const ACTION_TYPE_MOVE_DOWN_FIELD = 'moveDownField';
+export const ACTION_TYPE_UPDATE_FORM_SETTINGS = 'updateFormSettings';
 
 export const schemaReducer = (schema, action) => {
   let newSchema;
@@ -147,6 +148,13 @@ export const schemaReducer = (schema, action) => {
             return field;
           }
         }),
+      };
+      syncSchemaToStorage();
+      return newSchema;
+    case ACTION_TYPE_UPDATE_FORM_SETTINGS:
+      newSchema = {
+        ...schema,
+        ...action.settings,
       };
       syncSchemaToStorage();
       return newSchema;

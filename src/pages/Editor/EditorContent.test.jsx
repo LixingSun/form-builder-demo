@@ -153,4 +153,14 @@ describe('EditorContent', () => {
       field: firstField,
     });
   });
+
+  test('should open form settings dialog when form title action area is clicked', () => {
+    renderEditor();
+
+    const formTitleActionArea = screen.getByTestId('form-title-action-area');
+    fireEvent.click(formTitleActionArea);
+
+    const dialogTitleElement = screen.getByText('Configure Form');
+    expect(dialogTitleElement).toBeInTheDocument();
+  });
 });
