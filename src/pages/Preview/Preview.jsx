@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { SchemaContext } from '@/context/SchemaContext';
 import PreviewForm from './PreviewForm';
 
-export default function Preview() {
+export function Preview() {
   const schema = useContext(SchemaContext);
 
   return (

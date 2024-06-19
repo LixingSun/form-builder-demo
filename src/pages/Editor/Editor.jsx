@@ -11,7 +11,7 @@ import EditorContent from './EditorContent';
 import { Link } from 'react-router-dom';
 import { ACTION_TYPE_RESET_SCHEMA } from '../../context/SchemaContext';
 
-export default function Editor() {
+export function Editor() {
   const schema = useContext(SchemaContext);
   const dispatch = useContext(SchemaDispatchContext);
 

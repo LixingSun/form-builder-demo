@@ -7,18 +7,22 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from '@/pages/Editor/Editor';
-import Preview from '@/pages/Preview/Preview';
 import { SchemaProvider } from '@/context/SchemaContext';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    lazy: async () => {
+      const { Editor } = await import('@/pages/Editor/Editor');
+      return { Component: Editor };
+    },
   },
   {
     path: '/preview',
-    element: <Preview />,
+    lazy: async () => {
+      const { Preview } = await import('@/pages/Preview/Preview');
+      return { Component: Preview };
+    },
   },
 ]);
 

@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router-dom';
-import Preview from './Preview';
+import { Preview } from './Preview';
 import { render, screen } from '@testing-library/react';
 import { SchemaContext, INITIAL_SCHEMA } from '@/context/SchemaContext';
 
