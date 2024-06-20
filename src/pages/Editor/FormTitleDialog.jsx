@@ -7,6 +7,8 @@ import {
   TextField,
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 export default function FormTitleDialog({
   open,
@@ -14,6 +16,18 @@ export default function FormTitleDialog({
   onSubmit,
   initialValues,
 }) {
+  const { handleSubmit, handleChange, handleBlur, errors, touched } = useFormik(
+    {
+      initialValues,
+      validationSchema: yup.object({
+        title: yup.string().required('This field is required.'),
+        description: yup.string().required('This field is required.'),
+      }),
+      onSubmit: (values) => {
+        onSubmit(values);
+      },
+    }
+  );
   return (
     <Dialog
       data-testid="form-title-dialog"
@@ -23,12 +37,7 @@ export default function FormTitleDialog({
       onClose={onClose}
       PaperProps={{
         component: 'form',
-        onSubmit: (event) => {
-          event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries());
-          onSubmit(formJson);
-        },
+        onSubmit: handleSubmit,
       }}
     >
       <DialogTitle>Configure Form</DialogTitle>
@@ -43,6 +52,10 @@ export default function FormTitleDialog({
           fullWidth
           variant="standard"
           defaultValue={initialValues.title}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.title && Boolean(errors.title)}
+          helperText={touched.title && errors.title}
         />
         <TextField
           required
@@ -55,6 +68,10 @@ export default function FormTitleDialog({
           multiline
           variant="standard"
           defaultValue={initialValues.description}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.description && Boolean(errors.description)}
+          helperText={touched.description && errors.description}
         />
       </DialogContent>
       <DialogActions>

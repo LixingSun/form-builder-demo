@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { fireEvent } from '@testing-library/react';
 import FormTitleDialog from './FormTitleDialog';
 
@@ -51,7 +51,7 @@ describe('FieldDialog', () => {
     expect(mockOnCloseCallback).toHaveBeenCalled();
   });
 
-  test('should trigger onSubmit when submit button is clicked', () => {
+  test('should trigger onSubmit when submit button is clicked', async () => {
     const mockOnSubmitCallback = vi.fn();
     render(
       <FormTitleDialog
@@ -81,9 +81,11 @@ describe('FieldDialog', () => {
     const submitButton = screen.getByText('Save');
     fireEvent.click(submitButton);
 
-    expect(mockOnSubmitCallback).toHaveBeenCalledWith({
-      title: mockTitle,
-      description: mockDescription,
+    await waitFor(() => {
+      expect(mockOnSubmitCallback).toHaveBeenCalledWith({
+        title: mockTitle,
+        description: mockDescription,
+      });
     });
   });
 
