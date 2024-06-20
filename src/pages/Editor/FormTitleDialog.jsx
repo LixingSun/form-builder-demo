@@ -37,6 +37,8 @@ export default function FormTitleDialog({
       onClose={onClose}
       PaperProps={{
         component: 'form',
+        noValidate: true,
+        autoComplete: 'off',
         onSubmit: handleSubmit,
       }}
     >

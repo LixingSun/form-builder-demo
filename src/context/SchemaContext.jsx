@@ -34,8 +34,8 @@ export const INITIAL_SCHEMA = {
       title: 'Age',
       description: 'Please enter your age',
       isRequired: false,
-      minValue: '1',
-      maxValue: '150',
+      minValue: 1,
+      maxValue: 150,
     },
     {
       id: '4',

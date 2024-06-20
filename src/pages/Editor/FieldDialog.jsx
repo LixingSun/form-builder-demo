@@ -6,17 +6,16 @@ import {
   Button,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { v4 as uuidv4 } from 'uuid';
-import { getFieldConfig } from './fieldConfig';
+import {
+  getFieldConfig,
+  getFieldValidationSchema,
+  getInitialValues,
+} from './fieldConfig';
 import { toCamelCase } from '@/utils/stringUtils';
+import { useFormik } from 'formik';
 
 const formatFormJson = (formJson) => {
   let formattedFormJson = structuredClone(formJson);
-
-  formattedFormJson = {
-    ...formattedFormJson,
-    isRequired: formJson.isRequired == 'on',
-  };
 
   const numericFieldKeys = ['maxLength', 'maxValue', 'minValue'];
 
@@ -34,13 +33,28 @@ const formatFormJson = (formJson) => {
 
 export default function FieldDialog({
   open,
+  fieldId,
   fieldType,
   fieldDisplayName,
   onClose,
   onSubmit,
   initialValues,
 }) {
-  const newFieldId = uuidv4();
+  const { handleSubmit, handleChange, handleBlur, errors, touched } = useFormik(
+    {
+      initialValues: getInitialValues(initialValues, fieldType),
+      validationSchema: getFieldValidationSchema(fieldType),
+      onSubmit: (values) => {
+        const formattedValues = formatFormJson({
+          id: fieldId,
+          type: fieldType,
+          key: toCamelCase(values.title),
+          ...values,
+        });
+        onSubmit(formattedValues);
+      },
+    }
+  );
 
   return (
     <Dialog
@@ -51,24 +65,23 @@ export default function FieldDialog({
       onClose={onClose}
       PaperProps={{
         component: 'form',
-        onSubmit: (event) => {
-          event.preventDefault();
-          const formData = new FormData(event.currentTarget);
-          const formJson = Object.fromEntries(formData.entries());
-          const formattedFormJson = formatFormJson({
-            id: initialValues ? initialValues.id : newFieldId,
-            type: fieldType,
-            key: toCamelCase(formJson.title),
-            ...formJson,
-          });
-          onSubmit(formattedFormJson);
-        },
+        noValidate: true,
+        autoComplete: 'off',
+        onSubmit: handleSubmit,
       }}
     >
       <DialogTitle>
         {!initialValues ? 'Create' : 'Edit'} Field - {fieldDisplayName}
       </DialogTitle>
-      <DialogContent>{getFieldConfig(fieldType, initialValues)}</DialogContent>
+      <DialogContent>
+        {getFieldConfig(fieldType, {
+          initialValues,
+          handleChange,
+          handleBlur,
+          errors,
+          touched,
+        })}
+      </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button type="submit">{!initialValues ? 'Create' : 'Save'}</Button>
@@ -79,6 +92,7 @@ export default function FieldDialog({
 
 FieldDialog.propTypes = {
   open: PropTypes.bool.isRequired,
+  fieldId: PropTypes.string.isRequired,
   fieldType: PropTypes.string.isRequired,
   fieldDisplayName: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,

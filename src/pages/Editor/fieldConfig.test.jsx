@@ -3,8 +3,16 @@ import { FIELD_TYPES } from '@/constants/fieldConstants';
 import { getFieldConfig } from './fieldConfig';
 
 describe('getFieldConfig', () => {
+  const mockProps = {
+    initialValues: null,
+    handleChange: () => {},
+    handleBlur: () => {},
+    errors: {},
+    touched: {},
+  };
+
   test('should generate correct config fields for text field', () => {
-    const ConfigFields = getFieldConfig(FIELD_TYPES.textField);
+    const ConfigFields = getFieldConfig(FIELD_TYPES.textField, mockProps);
     render(ConfigFields);
 
     expect(screen.getByTestId('field-title-config')).toBeInTheDocument();
@@ -14,7 +22,7 @@ describe('getFieldConfig', () => {
   });
 
   test('should generate correct config fields for number field', () => {
-    const ConfigFields = getFieldConfig(FIELD_TYPES.number);
+    const ConfigFields = getFieldConfig(FIELD_TYPES.number, mockProps);
     render(ConfigFields);
 
     expect(screen.getByTestId('field-title-config')).toBeInTheDocument();
@@ -25,7 +33,7 @@ describe('getFieldConfig', () => {
   });
 
   test('should generate correct config fields for email field', () => {
-    const ConfigFields = getFieldConfig(FIELD_TYPES.email);
+    const ConfigFields = getFieldConfig(FIELD_TYPES.email, mockProps);
     render(ConfigFields);
 
     expect(screen.getByTestId('field-title-config')).toBeInTheDocument();
@@ -34,7 +42,7 @@ describe('getFieldConfig', () => {
   });
 
   test('should generate correct config fields for dropdown field', () => {
-    const ConfigFields = getFieldConfig(FIELD_TYPES.dropdown);
+    const ConfigFields = getFieldConfig(FIELD_TYPES.dropdown, mockProps);
     render(ConfigFields);
 
     expect(screen.getByTestId('field-title-config')).toBeInTheDocument();

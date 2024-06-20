@@ -17,6 +17,7 @@ import {
   SchemaDispatchContext,
   ACTION_TYPE_ADD_FIELD,
 } from '@/context/SchemaContext';
+import { v4 as uuidv4 } from 'uuid';
 
 const EditorMenuItem = ({ name, id, icon: Icon, onClick }) => {
   return (
@@ -45,6 +46,7 @@ export default function EditorMenu() {
   const [fieldCreationType, setFieldCreationType] = useState(
     FIELD_TYPES.textField
   );
+  const [fieldCreationId, setFieldCreationId] = useState(uuidv4());
   const dispatch = useContext(SchemaDispatchContext);
 
   return (
@@ -67,6 +69,7 @@ export default function EditorMenu() {
                 name={FIELD_TYPE_NAME_MAPPING[FIELD_TYPES[fieldType]]}
                 icon={FIELD_TYPE_ICON_MAPPING[FIELD_TYPES[fieldType]]}
                 onClick={() => {
+                  setFieldCreationId(uuidv4());
                   setFieldCreationType(FIELD_TYPES[fieldType]);
                   setIsFieldCreationOpen(true);
                 }}
@@ -77,6 +80,8 @@ export default function EditorMenu() {
       </Grid>
 
       <FieldDialog
+        key={fieldCreationId}
+        fieldId={fieldCreationId}
         open={isFieldCreationOpen}
         fieldType={fieldCreationType}
         fieldDisplayName={FIELD_TYPE_NAME_MAPPING[fieldCreationType]}

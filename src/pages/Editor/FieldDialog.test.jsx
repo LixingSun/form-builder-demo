@@ -1,16 +1,11 @@
 import { vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { fireEvent } from '@testing-library/react';
 import FieldDialog from './FieldDialog';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
 
 const mockDisplayName = 'Display Name';
-const mockUuid = 'mock-uuid-value';
-vi.mock('uuid', () => {
-  return {
-    v4: vi.fn(() => mockUuid),
-  };
-});
+const mockId = 'mock-uuid-value';
 
 describe('FieldDialog', () => {
   test('should show modal when it is open', () => {
@@ -31,6 +26,7 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={false}
+        fieldId={mockId}
         fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
@@ -46,6 +42,7 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={true}
+        fieldId={mockId}
         fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={mockOnCloseCallback}
@@ -58,11 +55,12 @@ describe('FieldDialog', () => {
     expect(mockOnCloseCallback).toHaveBeenCalled();
   });
 
-  test('should trigger onSubmit when submit button is clicked', () => {
+  test('should trigger onSubmit when submit button is clicked', async () => {
     const mockOnSubmitCallback = vi.fn();
     render(
       <FieldDialog
         open={true}
+        fieldId={mockId}
         fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
@@ -80,21 +78,23 @@ describe('FieldDialog', () => {
     const submitButton = screen.getByText('Create');
     fireEvent.click(submitButton);
 
-    expect(mockOnSubmitCallback).toHaveBeenCalledWith({
-      id: mockUuid,
-      title: mockTitle,
-      key: mockTitle.toLowerCase(),
-      type: FIELD_TYPES.textField,
-      description: '',
-      maxLength: null,
-      isRequired: false,
+    await waitFor(() => {
+      expect(mockOnSubmitCallback).toHaveBeenCalledWith({
+        id: mockId,
+        title: mockTitle,
+        key: mockTitle.toLowerCase(),
+        type: FIELD_TYPES.textField,
+        description: '',
+        maxLength: null,
+        isRequired: false,
+      });
     });
   });
 
   test('should handle editing case when initial values are provided', () => {
     const mockInitialTitle = 'Initial Title';
     const mockInitialValue = {
-      id: '1',
+      id: mockId,
       type: FIELD_TYPES.textField,
       title: mockInitialTitle,
       isRequired: true,
@@ -103,6 +103,7 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={true}
+        fieldId={mockId}
         fieldType={FIELD_TYPES.textField}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}

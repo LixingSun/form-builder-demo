@@ -34,6 +34,7 @@ import FormTitleDialog from './FormTitleDialog';
 
 export default function EditorContent({ schema }) {
   const [isFieldEditingOpen, setIsFieldEditingOpen] = useState(false);
+  const [fieldEditingId, setFieldEditingId] = useState('');
   const [fieldEditingType, setFieldEditingType] = useState(
     FIELD_TYPES.textField
   );
@@ -44,8 +45,9 @@ export default function EditorContent({ schema }) {
 
   const handleEditField = (field) => {
     setFieldEditingType(field.type);
-    setIsFieldEditingOpen(true);
+    setFieldEditingId(field.id);
     setFieldEditingInitialValues(field);
+    setIsFieldEditingOpen(true);
   };
 
   const handleDeleteField = (field) => {
@@ -153,6 +155,8 @@ export default function EditorContent({ schema }) {
       </Container>
 
       <FieldDialog
+        key={fieldEditingId}
+        fieldId={fieldEditingId}
         open={isFieldEditingOpen}
         fieldType={fieldEditingType}
         fieldDisplayName={FIELD_TYPE_NAME_MAPPING[fieldEditingType]}
