@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import {
   ScreenLoadingProvider,
   screenLoadingReducer,
-  ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+  SCREEN_LOADING_ACTION_TYPE,
 } from './ScreenLoadingContext';
 
 describe('ScreenLoadingProviderContext', () => {
@@ -24,19 +24,11 @@ describe('ScreenLoadingProviderContext', () => {
   describe('screenReducer', () => {
     test('should handle screen loading toggle', () => {
       const updatedLoadingStatus = screenLoadingReducer(false, {
-        type: ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+        type: SCREEN_LOADING_ACTION_TYPE.TOGGLE_SCREEN_LOADING,
         value: true,
       });
 
       expect(updatedLoadingStatus).toBeTruthy();
-    });
-
-    test('should throw error for unhandled action type', () => {
-      expect(() => {
-        screenLoadingReducer(false, {
-          type: 'unknown',
-        });
-      }).toThrowError();
     });
   });
 });

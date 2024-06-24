@@ -12,7 +12,8 @@ describe('FieldDialog', () => {
     render(
       <FieldDialog
         open={true}
-        fieldType={FIELD_TYPES.textField}
+        fieldId={mockId}
+        fieldType={FIELD_TYPES.TEXT_FIELD}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
         onSubmit={() => {}}
@@ -27,7 +28,7 @@ describe('FieldDialog', () => {
       <FieldDialog
         open={false}
         fieldId={mockId}
-        fieldType={FIELD_TYPES.textField}
+        fieldType={FIELD_TYPES.TEXT_FIELD}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
         onSubmit={() => {}}
@@ -43,7 +44,7 @@ describe('FieldDialog', () => {
       <FieldDialog
         open={true}
         fieldId={mockId}
-        fieldType={FIELD_TYPES.textField}
+        fieldType={FIELD_TYPES.TEXT_FIELD}
         fieldDisplayName={mockDisplayName}
         onClose={mockOnCloseCallback}
         onSubmit={() => {}}
@@ -61,7 +62,7 @@ describe('FieldDialog', () => {
       <FieldDialog
         open={true}
         fieldId={mockId}
-        fieldType={FIELD_TYPES.textField}
+        fieldType={FIELD_TYPES.TEXT_FIELD}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
         onSubmit={mockOnSubmitCallback}
@@ -72,8 +73,9 @@ describe('FieldDialog', () => {
     const titleConfigInput = screen
       .getByTestId('field-dialog')
       .querySelector('input[name=title]');
-    fireEvent.change(titleConfigInput, { target: { value: mockTitle } });
-    fireEvent.blur(titleConfigInput);
+    expect(titleConfigInput).not.toBeNull();
+    fireEvent.change(titleConfigInput!, { target: { value: mockTitle } });
+    fireEvent.blur(titleConfigInput!);
 
     const submitButton = screen.getByText('Create');
     fireEvent.click(submitButton);
@@ -83,7 +85,7 @@ describe('FieldDialog', () => {
         id: mockId,
         title: mockTitle,
         key: mockTitle.toLowerCase(),
-        type: FIELD_TYPES.textField,
+        type: FIELD_TYPES.TEXT_FIELD,
         description: '',
         maxLength: null,
         isRequired: false,
@@ -95,8 +97,9 @@ describe('FieldDialog', () => {
     const mockInitialTitle = 'Initial Title';
     const mockInitialValue = {
       id: mockId,
-      type: FIELD_TYPES.textField,
+      type: FIELD_TYPES.TEXT_FIELD,
       title: mockInitialTitle,
+      description: 'description',
       isRequired: true,
     };
 
@@ -104,7 +107,7 @@ describe('FieldDialog', () => {
       <FieldDialog
         open={true}
         fieldId={mockId}
-        fieldType={FIELD_TYPES.textField}
+        fieldType={FIELD_TYPES.TEXT_FIELD}
         fieldDisplayName={mockDisplayName}
         onClose={() => {}}
         onSubmit={() => {}}
@@ -117,7 +120,8 @@ describe('FieldDialog', () => {
 
     const titleConfigInput = screen
       .getByTestId('field-dialog')
-      .querySelector('input[name=title]');
+      .querySelector('input[name=title]') as HTMLInputElement;
+    expect(titleConfigInput).not.toBeNull();
     expect(titleConfigInput.value).toEqual(mockInitialTitle);
   });
 });

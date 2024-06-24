@@ -5,7 +5,6 @@ import {
   DialogTitle,
   Button,
 } from '@mui/material';
-import PropTypes from 'prop-types';
 import {
   getFieldConfig,
   getFieldValidationSchema,
@@ -13,25 +12,19 @@ import {
 } from './fieldConfig';
 import { toCamelCase } from '@/utils/stringUtils';
 import { useFormik } from 'formik';
+import { FIELD_TYPES } from '@/constants/fieldConstants';
+import { IField, IFieldBase } from '@/context/SchemaContext';
 
-const formatFormJson = (formJson) => {
-  let formattedFormJson = structuredClone(formJson);
-
-  const numericFieldKeys = ['maxLength', 'maxValue', 'minValue'];
-
-  numericFieldKeys.forEach((numericFieldKey) => {
-    if (
-      numericFieldKey in formattedFormJson &&
-      formattedFormJson[numericFieldKey] == ''
-    ) {
-      formattedFormJson[numericFieldKey] = null;
-    }
-  });
-
-  return formattedFormJson;
-};
-
-export default function FieldDialog({
+interface IFieldDialog {
+  open: boolean;
+  fieldId: string;
+  fieldType: FIELD_TYPES;
+  fieldDisplayName: string;
+  onClose(): void;
+  onSubmit(field: IField): void;
+  initialValues?: IFieldBase | null;
+}
+const FieldDialog: React.FC<IFieldDialog> = ({
   open,
   fieldId,
   fieldType,
@@ -39,22 +32,21 @@ export default function FieldDialog({
   onClose,
   onSubmit,
   initialValues,
-}) {
-  const { handleSubmit, handleChange, handleBlur, errors, touched } = useFormik(
-    {
-      initialValues: getInitialValues(initialValues, fieldType),
+}) => {
+  const { handleSubmit, handleChange, handleBlur, errors, touched } =
+    useFormik<IFieldBase>({
+      initialValues: getInitialValues(fieldType, initialValues),
       validationSchema: getFieldValidationSchema(fieldType),
       onSubmit: (values) => {
-        const formattedValues = formatFormJson({
+        const formattedValues = {
           id: fieldId,
           type: fieldType,
           key: toCamelCase(values.title),
           ...values,
-        });
+        };
         onSubmit(formattedValues);
       },
-    }
-  );
+    });
 
   return (
     <Dialog
@@ -88,14 +80,6 @@ export default function FieldDialog({
       </DialogActions>
     </Dialog>
   );
-}
-
-FieldDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  fieldId: PropTypes.string.isRequired,
-  fieldType: PropTypes.string.isRequired,
-  fieldDisplayName: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
 };
+
+export default FieldDialog;

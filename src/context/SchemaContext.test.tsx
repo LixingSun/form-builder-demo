@@ -1,25 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import {
-  ACTION_TYPE_INIT_SCHEMA,
-  ACTION_TYPE_RESET_SCHEMA,
-  ACTION_TYPE_ADD_FIELD,
-  ACTION_TYPE_EDIT_FIELD,
-  ACTION_TYPE_DELETE_FIELD,
-  ACTION_TYPE_MOVE_UP_FIELD,
-  ACTION_TYPE_MOVE_DOWN_FIELD,
-  ACTION_TYPE_UPDATE_FORM_SETTINGS,
+  SCHEMA_ACTION_TYPE,
   INITIAL_SCHEMA,
   SchemaProvider,
   schemaReducer,
 } from './SchemaContext';
 
 const localStorageMock = (() => {
-  let store = {};
+  let store: { [key: string]: string } = {};
 
   return {
-    getItem: (key) => store[key] || null,
-    setItem: (key, value) => {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
       store[key] = value.toString();
     },
   };
@@ -51,7 +44,7 @@ describe('SchemaContext', () => {
       );
 
       const actualNewSchema = schemaReducer(INITIAL_SCHEMA, {
-        type: ACTION_TYPE_INIT_SCHEMA,
+        type: SCHEMA_ACTION_TYPE.INIT_SCHEMA,
       });
 
       expect(actualNewSchema).toEqual(newSchema);
@@ -63,7 +56,7 @@ describe('SchemaContext', () => {
       const updatedSchema = schemaReducer(
         { ...INITIAL_SCHEMA, title: 'Test' },
         {
-          type: ACTION_TYPE_RESET_SCHEMA,
+          type: SCHEMA_ACTION_TYPE.RESET_SCHEMA,
         }
       );
 
@@ -71,13 +64,13 @@ describe('SchemaContext', () => {
     });
 
     test('should handle field addition', () => {
-      const newField = { id: 1 };
+      const newField = { ...INITIAL_SCHEMA.fields[0], id: 'newId' };
       const expectedNewSchema = {
         ...INITIAL_SCHEMA,
         fields: [...INITIAL_SCHEMA.fields, newField],
       };
       const actualNewSchema = schemaReducer(INITIAL_SCHEMA, {
-        type: ACTION_TYPE_ADD_FIELD,
+        type: SCHEMA_ACTION_TYPE.ADD_FIELD,
         field: newField,
       });
 
@@ -88,7 +81,7 @@ describe('SchemaContext', () => {
       const updatedField = { ...INITIAL_SCHEMA.fields[0], title: 'New Title' };
 
       const updatedSchema = schemaReducer(INITIAL_SCHEMA, {
-        type: ACTION_TYPE_EDIT_FIELD,
+        type: SCHEMA_ACTION_TYPE.EDIT_FIELD,
         field: updatedField,
       });
 
@@ -100,7 +93,7 @@ describe('SchemaContext', () => {
       const targetField = INITIAL_SCHEMA.fields[0];
 
       const updatedSchema = schemaReducer(INITIAL_SCHEMA, {
-        type: ACTION_TYPE_DELETE_FIELD,
+        type: SCHEMA_ACTION_TYPE.DELETE_FIELD,
         field: targetField,
       });
 
@@ -112,7 +105,7 @@ describe('SchemaContext', () => {
       const targetFieldTitle = INITIAL_SCHEMA.fields[1].title;
 
       const updatedSchema = schemaReducer(INITIAL_SCHEMA, {
-        type: ACTION_TYPE_MOVE_UP_FIELD,
+        type: SCHEMA_ACTION_TYPE.MOVE_UP_FIELD,
         field: INITIAL_SCHEMA.fields[1],
       });
 
@@ -123,7 +116,7 @@ describe('SchemaContext', () => {
       const targetFieldTitle = INITIAL_SCHEMA.fields[0].title;
 
       const updatedSchema = schemaReducer(INITIAL_SCHEMA, {
-        type: ACTION_TYPE_MOVE_DOWN_FIELD,
+        type: SCHEMA_ACTION_TYPE.MOVE_DOWN_FIELD,
         field: INITIAL_SCHEMA.fields[0],
       });
 
@@ -135,7 +128,7 @@ describe('SchemaContext', () => {
       const description = 'New Form Title';
 
       const updatedSchema = schemaReducer(INITIAL_SCHEMA, {
-        type: ACTION_TYPE_UPDATE_FORM_SETTINGS,
+        type: SCHEMA_ACTION_TYPE.UPDATE_FORM_SETTINGS,
         settings: {
           title,
           description,
@@ -144,14 +137,6 @@ describe('SchemaContext', () => {
 
       expect(updatedSchema.title).toEqual(title);
       expect(updatedSchema.description).toEqual(description);
-    });
-
-    test('should throw error for unhandled action type', () => {
-      expect(() => {
-        schemaReducer(INITIAL_SCHEMA, {
-          type: 'unknown',
-        });
-      }).toThrowError();
     });
   });
 });

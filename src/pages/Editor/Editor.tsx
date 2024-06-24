@@ -6,29 +6,24 @@ import {
   SettingsBackupRestore as ResetIcon,
   GitHub as GithubIcon,
 } from '@mui/icons-material';
+import { SchemaContext, SCHEMA_ACTION_TYPE } from '@/context/SchemaContext';
 import {
-  SchemaContext,
-  SchemaDispatchContext,
-  ACTION_TYPE_RESET_SCHEMA,
-} from '@/context/SchemaContext';
-import {
-  ScreenLoadingDispatchContext,
-  ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+  ScreenLoadingContext,
+  SCREEN_LOADING_ACTION_TYPE,
 } from '@/context/ScreenLoadingContext';
 import EditorMenu from './EditorMenu';
 import EditorContent from './EditorContent';
 
 export function Editor() {
-  const schema = useContext(SchemaContext);
-  const schemaDispatch = useContext(SchemaDispatchContext);
-  const isLoadingDispatch = useContext(ScreenLoadingDispatchContext);
+  const { schema, schemaDispatch } = useContext(SchemaContext);
+  const { isScreenLoadingDispatch } = useContext(ScreenLoadingContext);
 
   useEffect(() => {
-    isLoadingDispatch({
-      type: ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+    isScreenLoadingDispatch({
+      type: SCREEN_LOADING_ACTION_TYPE.TOGGLE_SCREEN_LOADING,
       value: false,
     });
-  }, [isLoadingDispatch]);
+  }, [isScreenLoadingDispatch]);
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -52,7 +47,7 @@ export function Editor() {
             sx={{ color: 'primary.contrastText' }}
             onClick={() => {
               schemaDispatch({
-                type: ACTION_TYPE_RESET_SCHEMA,
+                type: SCHEMA_ACTION_TYPE.RESET_SCHEMA,
               });
             }}
           >
@@ -64,8 +59,8 @@ export function Editor() {
             endIcon={<PreviewIcon />}
             sx={{ color: 'primary.contrastText' }}
             onClick={() => {
-              isLoadingDispatch({
-                type: ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+              isScreenLoadingDispatch({
+                type: SCREEN_LOADING_ACTION_TYPE.TOGGLE_SCREEN_LOADING,
                 value: true,
               });
             }}

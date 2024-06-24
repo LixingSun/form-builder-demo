@@ -3,22 +3,22 @@ import { BrowserRouter } from 'react-router-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import {
   SchemaContext,
-  SchemaDispatchContext,
   INITIAL_SCHEMA,
-  ACTION_TYPE_RESET_SCHEMA,
+  SCHEMA_ACTION_TYPE,
 } from '@/context/SchemaContext';
 import { vi } from 'vitest';
 import { ScreenLoadingProvider } from '@/context/ScreenLoadingContext';
 
-const renderWithContext = (schema = INITIAL_SCHEMA, dispatch = () => {}) => {
+const renderWithContext = (
+  schema = INITIAL_SCHEMA,
+  schemaDispatch = () => {}
+) => {
   render(
     <BrowserRouter>
-      <SchemaContext.Provider value={schema}>
-        <SchemaDispatchContext.Provider value={dispatch}>
-          <ScreenLoadingProvider>
-            <Editor />
-          </ScreenLoadingProvider>
-        </SchemaDispatchContext.Provider>
+      <SchemaContext.Provider value={{ schema, schemaDispatch }}>
+        <ScreenLoadingProvider>
+          <Editor />
+        </ScreenLoadingProvider>
       </SchemaContext.Provider>
     </BrowserRouter>
   );
@@ -39,7 +39,7 @@ describe('Editor', () => {
     const resetButton = screen.getByText('Reset');
     fireEvent.click(resetButton);
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: ACTION_TYPE_RESET_SCHEMA,
+      type: SCHEMA_ACTION_TYPE.RESET_SCHEMA,
     });
   });
 });

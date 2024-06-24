@@ -66,17 +66,19 @@ describe('FieldDialog', () => {
     const titleConfigInput = screen
       .getByTestId('form-title-config')
       .querySelector('input[name=title]');
-    fireEvent.change(titleConfigInput, { target: { value: mockTitle } });
-    fireEvent.blur(titleConfigInput);
+    expect(titleConfigInput).not.toBeNull();
+    fireEvent.change(titleConfigInput!, { target: { value: mockTitle } });
+    fireEvent.blur(titleConfigInput!);
 
     const mockDescription = 'New Description';
     const descriptionConfigInput = screen
       .getByTestId('form-description-config')
       .querySelector('textarea[name=description]');
-    fireEvent.change(descriptionConfigInput, {
+    expect(descriptionConfigInput).not.toBeNull();
+    fireEvent.change(descriptionConfigInput!, {
       target: { value: mockDescription },
     });
-    fireEvent.blur(descriptionConfigInput);
+    fireEvent.blur(descriptionConfigInput!);
 
     const submitButton = screen.getByText('Save');
     fireEvent.click(submitButton);
@@ -101,12 +103,14 @@ describe('FieldDialog', () => {
 
     const titleConfigInput = screen
       .getByTestId('form-title-config')
-      .querySelector('input[name=title]');
+      .querySelector('input[name=title]') as HTMLInputElement;
+    expect(titleConfigInput).not.toBeNull();
     expect(titleConfigInput.value).toEqual(mockInitialValues.title);
 
     const descriptionConfigInput = screen
       .getByTestId('form-description-config')
-      .querySelector('textarea[name=description]');
+      .querySelector('textarea[name=description]') as HTMLInputElement;
+    expect(descriptionConfigInput).not.toBeNull();
     expect(descriptionConfigInput.value).toEqual(mockInitialValues.description);
   });
 });

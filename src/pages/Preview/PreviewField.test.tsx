@@ -1,9 +1,20 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
-import PreviewField from './PreviewField';
+import PreviewField, { IPreviewFieldProps } from './PreviewField';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
+import { IField } from '@/context/SchemaContext';
+import { ChangeEvent, FocusEventHandler } from 'react';
+import { SelectChangeEvent } from '@mui/material';
+import { FormikTouched, FormikValues } from 'formik';
 
-const renderField = (field, setFormProps) => {
+interface IFormProps {
+  touched: boolean;
+  error?: string;
+  handleChange(e: ChangeEvent | SelectChangeEvent): void;
+  handleBlur: FocusEventHandler;
+  setTouched(touched: FormikTouched<FormikValues>): any;
+}
+const renderField = (field: IField, setFormProps: IFormProps) => {
   const formProps = setFormProps ?? {
     touched: false,
     error: undefined,
@@ -15,8 +26,8 @@ const renderField = (field, setFormProps) => {
 
 describe('PreviewField', () => {
   const mockTextField = {
-    id: 0,
-    type: FIELD_TYPES.textField,
+    id: '0',
+    type: FIELD_TYPES.TEXT_FIELD,
     title: 'Text Field Title',
     key: 'textFieldTitle',
     description: 'Text Field Description',
@@ -25,8 +36,8 @@ describe('PreviewField', () => {
   };
 
   const mockNumberField = {
-    id: 1,
-    type: FIELD_TYPES.number,
+    id: '1',
+    type: FIELD_TYPES.NUMBER,
     title: 'Number Field Title',
     key: 'numberFieldTitle',
     description: 'Number Field Description',
@@ -36,8 +47,8 @@ describe('PreviewField', () => {
   };
 
   const mockEmailField = {
-    id: 2,
-    type: FIELD_TYPES.email,
+    id: '2',
+    type: FIELD_TYPES.EMAIL,
     title: 'Email Field Title',
     key: 'emailFieldTitle',
     description: 'Email Field Description',
@@ -52,6 +63,7 @@ describe('PreviewField', () => {
         error: mockError,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen.getByText(mockError);
@@ -64,6 +76,7 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen
@@ -80,6 +93,7 @@ describe('PreviewField', () => {
         error: mockError,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen.queryByText(mockError);
@@ -94,12 +108,14 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: mockHandleChange,
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const fieldInput = screen
         .getByTestId(`field-${mockTextField.id}`)
         .querySelector('input');
-      fireEvent.change(fieldInput, { target: { value: 'new value' } });
+      expect(fieldInput).not.toBeNull();
+      fireEvent.change(fieldInput!, { target: { value: 'new value' } });
       expect(mockHandleChange).toHaveBeenCalled();
     });
 
@@ -111,12 +127,14 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: () => {},
         handleBlur: mockHandleBlur,
+        setTouched: () => {},
       });
 
       const fieldInput = screen
         .getByTestId(`field-${mockTextField.id}`)
         .querySelector('input');
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.blur(fieldInput!);
       expect(mockHandleBlur).toHaveBeenCalled();
     });
   });
@@ -129,6 +147,7 @@ describe('PreviewField', () => {
         error: mockError,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen.getByText(mockError);
@@ -141,6 +160,7 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen
@@ -157,6 +177,7 @@ describe('PreviewField', () => {
         error: mockError,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen.queryByText(mockError);
@@ -171,12 +192,14 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: mockHandleChange,
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const fieldInput = screen
         .getByTestId(`field-${mockNumberField.id}`)
         .querySelector('input');
-      fireEvent.change(fieldInput, { target: { value: 10 } });
+      expect(fieldInput).not.toBeNull();
+      fireEvent.change(fieldInput!, { target: { value: 10 } });
       expect(mockHandleChange).toHaveBeenCalled();
     });
 
@@ -188,12 +211,14 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: () => {},
         handleBlur: mockHandleBlur,
+        setTouched: () => {},
       });
 
       const fieldInput = screen
         .getByTestId(`field-${mockNumberField.id}`)
         .querySelector('input');
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.blur(fieldInput!);
       expect(mockHandleBlur).toHaveBeenCalled();
     });
   });
@@ -206,6 +231,7 @@ describe('PreviewField', () => {
         error: mockError,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen.getByText(mockError);
@@ -218,6 +244,7 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen
@@ -234,6 +261,7 @@ describe('PreviewField', () => {
         error: mockError,
         handleChange: () => {},
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const errorMsg = screen.queryByText(mockError);
@@ -248,12 +276,14 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: mockHandleChange,
         handleBlur: () => {},
+        setTouched: () => {},
       });
 
       const fieldInput = screen
         .getByTestId(`field-${mockEmailField.id}`)
         .querySelector('input');
-      fireEvent.change(fieldInput, { target: { value: 10 } });
+      expect(fieldInput).not.toBeNull();
+      fireEvent.change(fieldInput!, { target: { value: 10 } });
       expect(mockHandleChange).toHaveBeenCalled();
     });
 
@@ -265,21 +295,15 @@ describe('PreviewField', () => {
         error: undefined,
         handleChange: () => {},
         handleBlur: mockHandleBlur,
+        setTouched: () => {},
       });
 
       const fieldInput = screen
         .getByTestId(`field-${mockEmailField.id}`)
         .querySelector('input');
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.blur(fieldInput!);
       expect(mockHandleBlur).toHaveBeenCalled();
     });
-  });
-
-  test('should throw error for unhandled field type', () => {
-    expect(() => {
-      renderField({
-        type: 'unknown',
-      });
-    }).toThrowError();
   });
 });

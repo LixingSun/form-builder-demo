@@ -1,15 +1,41 @@
-import PropTypes from 'prop-types';
 import {
   FormControl,
   FormHelperText,
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
 } from '@mui/material';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
+import { IField } from '@/context/SchemaContext';
+import { ChangeEvent, FC, FocusEventHandler } from 'react';
+import { FormikTouched, FormikValues } from 'formik';
 
-function PreviewTextField({ field, touched, error, handleChange, handleBlur }) {
+interface IPreviewFieldPropsBase {
+  field: IField;
+  touched: boolean;
+  error?: string;
+  handleChange(e: ChangeEvent | SelectChangeEvent): void;
+}
+export interface IPreviewFieldProps extends IPreviewFieldPropsBase {
+  handleBlur: FocusEventHandler;
+  setTouched(touched: FormikTouched<FormikValues>): any;
+}
+interface IPreviewDefaultFieldProps extends IPreviewFieldPropsBase {
+  handleBlur: FocusEventHandler;
+}
+interface IPreviewDropdownFieldProps extends IPreviewFieldPropsBase {
+  setTouched(touched: FormikTouched<FormikValues>): any;
+}
+
+const PreviewTextField: FC<IPreviewDefaultFieldProps> = ({
+  field,
+  touched,
+  error,
+  handleChange,
+  handleBlur,
+}) => {
   return (
     <TextField
       required={field.isRequired}
@@ -27,22 +53,15 @@ function PreviewTextField({ field, touched, error, handleChange, handleBlur }) {
       helperText={touched && error}
     />
   );
-}
-PreviewTextField.propTypes = {
-  field: PropTypes.object.isRequired,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function PreviewNumberField({
+const PreviewNumberField: FC<IPreviewDefaultFieldProps> = ({
   field,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       required={field.isRequired}
@@ -61,22 +80,15 @@ function PreviewNumberField({
       helperText={touched && error}
     />
   );
-}
-PreviewNumberField.propTypes = {
-  field: PropTypes.object.isRequired,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function PreviewEmailField({
+const PreviewEmailField: FC<IPreviewDefaultFieldProps> = ({
   field,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       required={field.isRequired}
@@ -94,23 +106,16 @@ function PreviewEmailField({
       helperText={touched && error}
     />
   );
-}
-PreviewEmailField.propTypes = {
-  field: PropTypes.object.isRequired,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function PreviewDropdownField({
+const PreviewDropdownField: FC<IPreviewDropdownFieldProps> = ({
   field,
   touched,
   error,
   handleChange,
   setTouched,
-}) {
-  const options = field.options.split(',');
+}) => {
+  const options = field.options?.split(',');
 
   return (
     <FormControl required={field.isRequired} margin="dense" fullWidth>
@@ -129,7 +134,7 @@ function PreviewDropdownField({
         }}
         defaultValue=""
       >
-        {options.map((option) => (
+        {options?.map((option) => (
           <MenuItem key={option} value={option}>
             {option}
           </MenuItem>
@@ -144,25 +149,18 @@ function PreviewDropdownField({
       </FormHelperText>
     </FormControl>
   );
-}
-PreviewDropdownField.propTypes = {
-  field: PropTypes.object.isRequired,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  setTouched: PropTypes.func.isRequired,
 };
 
-export default function PreviewField({
+const PreviewField: React.FC<IPreviewFieldProps> = ({
   field,
   touched,
   error,
   handleChange,
   handleBlur,
   setTouched,
-}) {
+}) => {
   switch (field.type) {
-    case FIELD_TYPES.textField:
+    case FIELD_TYPES.TEXT_FIELD:
       return (
         <PreviewTextField
           field={field}
@@ -172,7 +170,7 @@ export default function PreviewField({
           handleBlur={handleBlur}
         />
       );
-    case FIELD_TYPES.number:
+    case FIELD_TYPES.NUMBER:
       return (
         <PreviewNumberField
           field={field}
@@ -182,7 +180,7 @@ export default function PreviewField({
           handleBlur={handleBlur}
         />
       );
-    case FIELD_TYPES.email:
+    case FIELD_TYPES.EMAIL:
       return (
         <PreviewEmailField
           field={field}
@@ -192,7 +190,7 @@ export default function PreviewField({
           handleBlur={handleBlur}
         />
       );
-    case FIELD_TYPES.dropdown:
+    case FIELD_TYPES.DROPDOWN:
       return (
         <PreviewDropdownField
           field={field}
@@ -202,16 +200,7 @@ export default function PreviewField({
           setTouched={setTouched}
         />
       );
-    default:
-      throw Error('Unknown field type: ' + field.type);
   }
-}
-
-PreviewField.propTypes = {
-  field: PropTypes.object.isRequired,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
-  setTouched: PropTypes.func.isRequired,
 };
+
+export default PreviewField;

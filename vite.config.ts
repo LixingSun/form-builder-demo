@@ -17,7 +17,13 @@ export default defineConfig({
     setupFiles: './src/setupTests.js',
     coverage: {
       provider: 'istanbul',
-      exclude: [...coverageConfigDefaults.exclude, '**/main.jsx'],
+      exclude: [...coverageConfigDefaults.exclude, '**/main.tsx'],
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
     },
   },
 });

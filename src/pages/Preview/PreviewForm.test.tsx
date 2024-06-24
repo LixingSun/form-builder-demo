@@ -2,14 +2,23 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import PreviewForm from './PreviewForm';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
 import { expect } from 'vitest';
+import { IField, IFormSchema } from '@/context/SchemaContext';
+
+const initSchema = (fields: IField[]): IFormSchema => {
+  return {
+    title: 'title',
+    description: 'description',
+    fields,
+  };
+};
 
 describe('PreviewForm', () => {
-  let mockSchema;
+  let mockSchema: IFormSchema;
 
   describe('Text Field', () => {
-    const mockTextField = {
-      id: 0,
-      type: FIELD_TYPES.textField,
+    const mockTextField: IField = {
+      id: '0',
+      type: FIELD_TYPES.TEXT_FIELD,
       title: 'Text Field Title',
       key: 'textFieldTitle',
       description: 'Text Field Description',
@@ -18,9 +27,7 @@ describe('PreviewForm', () => {
     };
 
     test('should render text field title', () => {
-      mockSchema = {
-        fields: [mockTextField],
-      };
+      mockSchema = initSchema([mockTextField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
@@ -29,16 +36,15 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field is required and no value is provided after touching', async () => {
-      mockSchema = {
-        fields: [mockTextField],
-      };
+      mockSchema = initSchema([mockTextField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockTextField.id}`)
         .querySelector('input');
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.blur(fieldInput!);
 
       await waitFor(() => {
         const errorMsg = screen
@@ -49,17 +55,16 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field value exceeds maximum length', async () => {
-      mockSchema = {
-        fields: [{ ...mockTextField, maxLength: '3' }],
-      };
+      mockSchema = initSchema([{ ...mockTextField, maxLength: 3 }]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockTextField.id}`)
         .querySelector('input');
-      fireEvent.change(fieldInput, { target: { value: 'over' } });
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.change(fieldInput!, { target: { value: 'over' } });
+      fireEvent.blur(fieldInput!);
 
       await waitFor(() => {
         const errorMsg = screen
@@ -71,9 +76,9 @@ describe('PreviewForm', () => {
   });
 
   describe('Number Field', () => {
-    const mockNumberField = {
-      id: 0,
-      type: FIELD_TYPES.number,
+    const mockNumberField: IField = {
+      id: '0',
+      type: FIELD_TYPES.NUMBER,
       title: 'Number Field Title',
       key: 'numberFieldTitle',
       description: 'Number Field Description',
@@ -83,9 +88,7 @@ describe('PreviewForm', () => {
     };
 
     test('should render number field title', () => {
-      mockSchema = {
-        fields: [mockNumberField],
-      };
+      mockSchema = initSchema([mockNumberField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
@@ -94,16 +97,15 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field is required and no value is provided after touching', async () => {
-      mockSchema = {
-        fields: [mockNumberField],
-      };
+      mockSchema = initSchema([mockNumberField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockNumberField.id}`)
         .querySelector('input');
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.blur(fieldInput!);
 
       await waitFor(() => {
         const errorMsg = screen
@@ -114,17 +116,16 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field value exceeds maximum value', async () => {
-      mockSchema = {
-        fields: [{ ...mockNumberField, maxValue: '10' }],
-      };
+      mockSchema = initSchema([{ ...mockNumberField, maxValue: 10 }]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockNumberField.id}`)
         .querySelector('input');
-      fireEvent.change(fieldInput, { target: { value: 20 } });
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.change(fieldInput!, { target: { value: 20 } });
+      fireEvent.blur(fieldInput!);
 
       await waitFor(() => {
         const errorMsg = screen
@@ -135,17 +136,16 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field value is less then minimum value', async () => {
-      mockSchema = {
-        fields: [{ ...mockNumberField, minValue: 1 }],
-      };
+      mockSchema = initSchema([{ ...mockNumberField, minValue: 1 }]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockNumberField.id}`)
         .querySelector('input');
-      fireEvent.change(fieldInput, { target: { value: 0 } });
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.change(fieldInput!, { target: { value: 0 } });
+      fireEvent.blur(fieldInput!);
 
       await waitFor(() => {
         const errorMsg = screen
@@ -158,8 +158,8 @@ describe('PreviewForm', () => {
 
   describe('Email Field', () => {
     const mockEmailField = {
-      id: 0,
-      type: FIELD_TYPES.email,
+      id: '0',
+      type: FIELD_TYPES.EMAIL,
       title: 'Email Field Title',
       key: 'emailFieldTitle',
       description: 'Email Field Description',
@@ -167,9 +167,7 @@ describe('PreviewForm', () => {
     };
 
     test('should render email field title', () => {
-      mockSchema = {
-        fields: [mockEmailField],
-      };
+      mockSchema = initSchema([mockEmailField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
@@ -178,16 +176,15 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field is required and no value is provided after touching', async () => {
-      mockSchema = {
-        fields: [mockEmailField],
-      };
+      mockSchema = initSchema([mockEmailField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockEmailField.id}`)
         .querySelector('input');
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.blur(fieldInput!);
 
       await waitFor(() => {
         const errorMsg = screen
@@ -198,17 +195,16 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field value is not a valid email', async () => {
-      mockSchema = {
-        fields: [mockEmailField],
-      };
+      mockSchema = initSchema([mockEmailField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockEmailField.id}`)
         .querySelector('input');
-      fireEvent.change(fieldInput, { target: { value: 'invalidemail' } });
-      fireEvent.blur(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.change(fieldInput!, { target: { value: 'invalidemail' } });
+      fireEvent.blur(fieldInput!);
 
       await waitFor(() => {
         const errorMsg = screen
@@ -221,8 +217,8 @@ describe('PreviewForm', () => {
 
   describe('Dropdown Field', () => {
     const mockDropdownField = {
-      id: 0,
-      type: FIELD_TYPES.dropdown,
+      id: '0',
+      type: FIELD_TYPES.DROPDOWN,
       title: 'Dropdown Field Title',
       key: 'dropdownFieldTitle',
       description: 'Dropdown Field Description',
@@ -231,9 +227,7 @@ describe('PreviewForm', () => {
     };
 
     test('should render dropdown field title', () => {
-      mockSchema = {
-        fields: [mockDropdownField],
-      };
+      mockSchema = initSchema([mockDropdownField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
@@ -242,21 +236,21 @@ describe('PreviewForm', () => {
     });
 
     test('should show error when the field is required and no option is selected after touching', async () => {
-      mockSchema = {
-        fields: [mockDropdownField],
-      };
+      mockSchema = initSchema([mockDropdownField]);
 
       render(<PreviewForm schema={mockSchema} />);
 
       const fieldInput = screen
         .getByTestId(`field-${mockDropdownField.id}`)
         .querySelector('[role=combobox]');
-      fireEvent.mouseDown(fieldInput);
+      expect(fieldInput).not.toBeNull();
+      fireEvent.mouseDown(fieldInput!);
 
       const modalBackdrop = screen
         .getByRole('presentation')
         .querySelector('.MuiModal-backdrop');
-      fireEvent.click(modalBackdrop);
+      expect(modalBackdrop).not.toBeNull();
+      fireEvent.click(modalBackdrop!);
 
       await waitFor(() => {
         const helperText = screen.getByTestId(
@@ -266,15 +260,5 @@ describe('PreviewForm', () => {
         expect(helperText).toHaveClass('Mui-error');
       });
     });
-  });
-
-  test('should throw error for unhandled field type', () => {
-    mockSchema = {
-      fields: [{ type: 'unknown' }],
-    };
-
-    expect(() => {
-      render(<PreviewForm schema={mockSchema} />);
-    }).toThrowError();
   });
 });

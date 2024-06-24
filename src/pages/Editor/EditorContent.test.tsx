@@ -2,11 +2,8 @@ import EditorContent from './EditorContent';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import {
   INITIAL_SCHEMA,
-  SchemaDispatchContext,
-  ACTION_TYPE_EDIT_FIELD,
-  ACTION_TYPE_DELETE_FIELD,
-  ACTION_TYPE_MOVE_UP_FIELD,
-  ACTION_TYPE_MOVE_DOWN_FIELD,
+  SchemaContext,
+  SCHEMA_ACTION_TYPE,
 } from '@/context/SchemaContext';
 import { vi } from 'vitest';
 import {
@@ -40,7 +37,7 @@ describe('EditorContent', () => {
     fireEvent.click(editButton);
 
     const dialogTitleElement = screen.getByText(
-      `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
+      `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.TEXT_FIELD]}`
     );
     expect(dialogTitleElement).toBeInTheDocument();
   });
@@ -56,7 +53,7 @@ describe('EditorContent', () => {
 
     await waitFor(() => {
       const dialogTitleElement = screen.queryByText(
-        `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
+        `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.TEXT_FIELD]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
     });
@@ -66,9 +63,11 @@ describe('EditorContent', () => {
     const mockDispatch = vi.fn();
 
     render(
-      <SchemaDispatchContext.Provider value={mockDispatch}>
+      <SchemaContext.Provider
+        value={{ schema: INITIAL_SCHEMA, schemaDispatch: mockDispatch }}
+      >
         <EditorContent schema={INITIAL_SCHEMA} />
-      </SchemaDispatchContext.Provider>
+      </SchemaContext.Provider>
     );
 
     const editButton = screen.getByTestId('edit-field-button-0');
@@ -79,11 +78,11 @@ describe('EditorContent', () => {
 
     await waitFor(() => {
       const dialogTitleElement = screen.queryByText(
-        `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
+        `Edit Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.TEXT_FIELD]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
       expect(mockDispatch).toHaveBeenCalledWith(
-        expect.objectContaining({ type: ACTION_TYPE_EDIT_FIELD })
+        expect.objectContaining({ type: SCHEMA_ACTION_TYPE.EDIT_FIELD })
       );
     });
   });
@@ -94,16 +93,24 @@ describe('EditorContent', () => {
     const onlyField = INITIAL_SCHEMA.fields[0];
 
     render(
-      <SchemaDispatchContext.Provider value={mockDispatch}>
-        <EditorContent schema={{ title: 'Form', fields: [onlyField] }} />
-      </SchemaDispatchContext.Provider>
+      <SchemaContext.Provider
+        value={{ schema: INITIAL_SCHEMA, schemaDispatch: mockDispatch }}
+      >
+        <EditorContent
+          schema={{
+            title: 'Form',
+            description: 'Description',
+            fields: [onlyField],
+          }}
+        />
+      </SchemaContext.Provider>
     );
 
     const deleteButton = screen.getByTestId('delete-field-button-0');
     fireEvent.click(deleteButton);
 
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: ACTION_TYPE_DELETE_FIELD,
+      type: SCHEMA_ACTION_TYPE.DELETE_FIELD,
       field: onlyField,
     });
   });
@@ -115,18 +122,24 @@ describe('EditorContent', () => {
     const secondField = INITIAL_SCHEMA.fields[1];
 
     render(
-      <SchemaDispatchContext.Provider value={mockDispatch}>
+      <SchemaContext.Provider
+        value={{ schema: INITIAL_SCHEMA, schemaDispatch: mockDispatch }}
+      >
         <EditorContent
-          schema={{ title: 'Form', fields: [firstField, secondField] }}
+          schema={{
+            title: 'Form',
+            description: 'Description',
+            fields: [firstField, secondField],
+          }}
         />
-      </SchemaDispatchContext.Provider>
+      </SchemaContext.Provider>
     );
 
     const moveUpButton = screen.getByTestId('move-up-field-button-1');
     fireEvent.click(moveUpButton);
 
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: ACTION_TYPE_MOVE_UP_FIELD,
+      type: SCHEMA_ACTION_TYPE.MOVE_UP_FIELD,
       field: secondField,
     });
   });
@@ -138,18 +151,24 @@ describe('EditorContent', () => {
     const secondField = INITIAL_SCHEMA.fields[1];
 
     render(
-      <SchemaDispatchContext.Provider value={mockDispatch}>
+      <SchemaContext.Provider
+        value={{ schema: INITIAL_SCHEMA, schemaDispatch: mockDispatch }}
+      >
         <EditorContent
-          schema={{ title: 'Form', fields: [firstField, secondField] }}
+          schema={{
+            title: 'Form',
+            description: 'Description',
+            fields: [firstField, secondField],
+          }}
         />
-      </SchemaDispatchContext.Provider>
+      </SchemaContext.Provider>
     );
 
     const moveDownButton = screen.getByTestId('move-down-field-button-0');
     fireEvent.click(moveDownButton);
 
     expect(mockDispatch).toHaveBeenCalledWith({
-      type: ACTION_TYPE_MOVE_DOWN_FIELD,
+      type: SCHEMA_ACTION_TYPE.MOVE_DOWN_FIELD,
       field: firstField,
     });
   });

@@ -6,16 +6,23 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { IFormSettings } from '@/context/SchemaContext';
 
-export default function FormTitleDialog({
+interface IFormTitleDialogProps {
+  open: boolean;
+  onClose(): void;
+  onSubmit(field: IFormSettings): void;
+  initialValues: IFormSettings;
+}
+
+const FormTitleDialog: React.FC<IFormTitleDialogProps> = ({
   open,
   onClose,
   onSubmit,
   initialValues,
-}) {
+}) => {
   const { handleSubmit, handleChange, handleBlur, errors, touched } = useFormik(
     {
       initialValues,
@@ -82,11 +89,6 @@ export default function FormTitleDialog({
       </DialogActions>
     </Dialog>
   );
-}
-
-FormTitleDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired,
 };
+
+export default FormTitleDialog;

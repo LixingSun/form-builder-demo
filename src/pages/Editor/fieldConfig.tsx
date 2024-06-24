@@ -1,15 +1,25 @@
+import { ChangeEvent, FocusEvent } from 'react';
+import * as yup from 'yup';
 import { TextField, FormControlLabel, Switch } from '@mui/material';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
-import PropTypes from 'prop-types';
-import * as yup from 'yup';
+import { IFieldBase } from '@/context/SchemaContext';
+import { FormikErrors, FormikTouched } from 'formik';
 
-function TitleConfig({
+interface IConfigProps {
+  defaultValue?: string | number | boolean | null;
+  touched?: boolean;
+  error?: string;
+  handleChange(e: ChangeEvent): void;
+  handleBlur?(e: FocusEvent): void;
+}
+
+const TitleConfig: React.FC<IConfigProps> = ({
   defaultValue,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       required
@@ -27,22 +37,15 @@ function TitleConfig({
       helperText={touched && error}
     />
   );
-}
-TitleConfig.propTypes = {
-  defaultValue: PropTypes.string,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function DescriptionConfig({
+const DescriptionConfig: React.FC<IConfigProps> = ({
   defaultValue,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       margin="dense"
@@ -59,22 +62,15 @@ function DescriptionConfig({
       helperText={touched && error}
     />
   );
-}
-DescriptionConfig.propTypes = {
-  defaultValue: PropTypes.string,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function MaxLengthConfig({
+const MaxLengthConfig: React.FC<IConfigProps> = ({
   defaultValue,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       margin="dense"
@@ -92,22 +88,15 @@ function MaxLengthConfig({
       helperText={touched && error}
     />
   );
-}
-MaxLengthConfig.propTypes = {
-  defaultValue: PropTypes.number,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function MaxValueConfig({
+const MaxValueConfig: React.FC<IConfigProps> = ({
   defaultValue,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       margin="dense"
@@ -125,22 +114,15 @@ function MaxValueConfig({
       helperText={touched && error}
     />
   );
-}
-MaxValueConfig.propTypes = {
-  defaultValue: PropTypes.number,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function MinValueConfig({
+const MinValueConfig: React.FC<IConfigProps> = ({
   defaultValue,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       margin="dense"
@@ -158,22 +140,15 @@ function MinValueConfig({
       helperText={touched && error}
     />
   );
-}
-MinValueConfig.propTypes = {
-  defaultValue: PropTypes.number,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function OptionsConfig({
+const OptionsConfig: React.FC<IConfigProps> = ({
   defaultValue,
   touched,
   error,
   handleChange,
   handleBlur,
-}) {
+}) => {
   return (
     <TextField
       required
@@ -195,37 +170,43 @@ function OptionsConfig({
       }
     />
   );
-}
-OptionsConfig.propTypes = {
-  defaultValue: PropTypes.string,
-  touched: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
 };
 
-function RequiredConfig({ defaultValue, handleChange }) {
+const RequiredConfig: React.FC<IConfigProps> = ({
+  defaultValue,
+  handleChange,
+}) => {
   return (
     <FormControlLabel
       name="isRequired"
       id="field-required-config"
       data-testid="field-required-config"
-      control={<Switch defaultChecked={defaultValue} onChange={handleChange} />}
+      control={
+        <Switch
+          defaultChecked={Boolean(defaultValue)}
+          onChange={handleChange}
+        />
+      }
       label="Required"
       sx={{ marginTop: 2, marginBottom: 1 }}
     />
   );
-}
-RequiredConfig.propTypes = {
-  defaultValue: PropTypes.bool,
-  handleChange: PropTypes.func.isRequired,
 };
 
+interface IFieldConfigProps {
+  initialValues?: IFieldBase | null;
+  handleChange(e: ChangeEvent): void;
+  handleBlur(e: FocusEvent): void;
+  errors: FormikErrors<IFieldBase>;
+  touched: FormikTouched<IFieldBase>;
+}
 export const getFieldConfig = (
-  fieldType,
-  { initialValues, handleChange, handleBlur, errors, touched }
+  fieldType: FIELD_TYPES,
+  formikProps: IFieldConfigProps
 ) => {
-  const getConfigProps = (attr) => {
+  const { initialValues, handleChange, handleBlur, errors, touched } =
+    formikProps;
+  const getConfigProps = (attr: keyof IFieldBase): IConfigProps => {
     return {
       defaultValue: initialValues ? initialValues[attr] : undefined,
       handleChange,
@@ -236,7 +217,7 @@ export const getFieldConfig = (
   };
 
   switch (fieldType) {
-    case FIELD_TYPES.textField:
+    case FIELD_TYPES.TEXT_FIELD:
       return (
         <>
           <TitleConfig {...getConfigProps('title')} />
@@ -245,7 +226,7 @@ export const getFieldConfig = (
           <RequiredConfig {...getConfigProps('isRequired')} />
         </>
       );
-    case FIELD_TYPES.number:
+    case FIELD_TYPES.NUMBER:
       return (
         <>
           <TitleConfig {...getConfigProps('title')} />
@@ -255,7 +236,7 @@ export const getFieldConfig = (
           <RequiredConfig {...getConfigProps('isRequired')} />
         </>
       );
-    case FIELD_TYPES.email:
+    case FIELD_TYPES.EMAIL:
       return (
         <>
           <TitleConfig {...getConfigProps('title')} />
@@ -263,7 +244,7 @@ export const getFieldConfig = (
           <RequiredConfig {...getConfigProps('isRequired')} />
         </>
       );
-    case FIELD_TYPES.dropdown:
+    case FIELD_TYPES.DROPDOWN:
       return (
         <>
           <TitleConfig {...getConfigProps('title')} />
@@ -275,26 +256,26 @@ export const getFieldConfig = (
   }
 };
 
-export const getFieldValidationSchema = (fieldType) => {
+export const getFieldValidationSchema = (fieldType: FIELD_TYPES) => {
   let validators = {};
 
   switch (fieldType) {
-    case FIELD_TYPES.textField:
+    case FIELD_TYPES.TEXT_FIELD:
       validators = {
         title: yup.string().required('This field is required.'),
       };
       break;
-    case FIELD_TYPES.number:
+    case FIELD_TYPES.NUMBER:
       validators = {
         title: yup.string().required('This field is required.'),
       };
       break;
-    case FIELD_TYPES.email:
+    case FIELD_TYPES.EMAIL:
       validators = {
         title: yup.string().required('This field is required.'),
       };
       break;
-    case FIELD_TYPES.dropdown:
+    case FIELD_TYPES.DROPDOWN:
       validators = {
         title: yup.string().required('This field is required.'),
         options: yup.string().required('This field is required.'),
@@ -305,22 +286,47 @@ export const getFieldValidationSchema = (fieldType) => {
   return yup.object(validators);
 };
 
-export const getInitialValues = (initialValues, fieldType) => {
-  if (initialValues) return initialValues;
-  switch (fieldType) {
-    case FIELD_TYPES.textField:
-      return { title: '', description: '', maxLength: null, isRequired: false };
-    case FIELD_TYPES.number:
-      return {
-        title: '',
-        description: '',
-        minValue: null,
-        maxValue: null,
-        isRequired: false,
-      };
-    case FIELD_TYPES.email:
-      return { title: '', description: '', isRequired: false };
-    case FIELD_TYPES.dropdown:
-      return { title: '', description: '', options: '', isRequired: false };
+export const TEXT_FIELD_INITIAL_VALUES = {
+  title: '',
+  description: '',
+  maxLength: null,
+  isRequired: false,
+};
+export const NUMBER_INITIAL_VALUES = {
+  title: '',
+  description: '',
+  minValue: null,
+  maxValue: null,
+  isRequired: false,
+};
+export const EMAIL_INITIAL_VALUES = {
+  title: '',
+  description: '',
+  isRequired: false,
+};
+export const DROPDOWN_INITIAL_VALUES = {
+  title: '',
+  description: '',
+  options: '',
+  isRequired: false,
+};
+
+export const getInitialValues = (
+  fieldType: FIELD_TYPES,
+  initialValues?: IFieldBase | null
+): IFieldBase => {
+  if (!initialValues) {
+    switch (fieldType) {
+      case FIELD_TYPES.TEXT_FIELD:
+        return TEXT_FIELD_INITIAL_VALUES;
+      case FIELD_TYPES.NUMBER:
+        return NUMBER_INITIAL_VALUES;
+      case FIELD_TYPES.EMAIL:
+        return EMAIL_INITIAL_VALUES;
+      case FIELD_TYPES.DROPDOWN:
+        return DROPDOWN_INITIAL_VALUES;
+    }
   }
+
+  return initialValues;
 };

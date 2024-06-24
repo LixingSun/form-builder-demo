@@ -46,6 +46,7 @@ Open http://localhost:5173 to view it in your browser.
 
 - [React](https://react.dev/)
 - [Vite](https://vitejs.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
 - [MUI (Material-UI)](https://mui.com/)
 - [Formik](https://formik.org/)
 - [Vitest](https://vitest.dev/)
@@ -60,7 +61,7 @@ The application uses a combination of React's Context API and Reducer for state 
 ## CI/CD
 
 - **Local Hooks**:
-  - before commit: execute eslint and prettier
+  - before commit: execute TypeScript check, eslint and prettier
   - before push: execute unit tests
 - **Pipeline and Deployment**: [GitHub Actions](https://github.com/LixingSun/form-builder-demo/actions)
 - **Hosting**: [GitHub Pages](https://form-builder.oran.zone/)

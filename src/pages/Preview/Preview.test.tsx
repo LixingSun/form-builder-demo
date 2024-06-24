@@ -1,13 +1,18 @@
 import { BrowserRouter } from 'react-router-dom';
 import { Preview } from './Preview';
 import { render, screen } from '@testing-library/react';
-import { SchemaContext, INITIAL_SCHEMA } from '@/context/SchemaContext';
+import {
+  SchemaContext,
+  INITIAL_SCHEMA,
+  IFormSchema,
+} from '@/context/SchemaContext';
 import { ScreenLoadingProvider } from '@/context/ScreenLoadingContext';
+import { vi } from 'vitest';
 
-const renderPreview = (schema) => {
+const renderPreview = (schema: IFormSchema) => {
   render(
     <BrowserRouter>
-      <SchemaContext.Provider value={schema}>
+      <SchemaContext.Provider value={{ schema, schemaDispatch: vi.fn() }}>
         <ScreenLoadingProvider>
           <Preview />
         </ScreenLoadingProvider>

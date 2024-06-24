@@ -6,8 +6,9 @@ import {
 } from '@/constants/fieldConstants';
 import { expect, vi } from 'vitest';
 import {
-  SchemaDispatchContext,
-  ACTION_TYPE_ADD_FIELD,
+  INITIAL_SCHEMA,
+  SchemaContext,
+  SCHEMA_ACTION_TYPE,
 } from '@/context/SchemaContext';
 
 describe('EditorMenu', () => {
@@ -22,12 +23,13 @@ describe('EditorMenu', () => {
     render(<EditorMenu />);
 
     const menuItem = screen
-      .getByTestId(`${FIELD_TYPES.textField}-menu-item`)
+      .getByTestId(`${FIELD_TYPES.TEXT_FIELD}-menu-item`)
       .querySelector('button');
-    fireEvent.click(menuItem);
+    expect(menuItem).not.toBeNull();
+    fireEvent.click(menuItem!);
 
     const dialogTitleElement = screen.getByText(
-      `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
+      `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.TEXT_FIELD]}`
     );
     expect(dialogTitleElement).toBeInTheDocument();
   });
@@ -36,16 +38,17 @@ describe('EditorMenu', () => {
     render(<EditorMenu />);
 
     const menuItem = screen
-      .getByTestId(`${FIELD_TYPES.textField}-menu-item`)
+      .getByTestId(`${FIELD_TYPES.TEXT_FIELD}-menu-item`)
       .querySelector('button');
-    fireEvent.click(menuItem);
+    expect(menuItem).not.toBeNull();
+    fireEvent.click(menuItem!);
 
     const cancelButton = screen.getByText(/cancel/i);
     fireEvent.click(cancelButton);
 
     await waitFor(() => {
       const dialogTitleElement = screen.queryByText(
-        `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
+        `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.TEXT_FIELD]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
     });
@@ -54,33 +57,37 @@ describe('EditorMenu', () => {
   test('should trigger submisson and close dialog when submit callback is triggered', async () => {
     const mockDispatch = vi.fn();
     render(
-      <SchemaDispatchContext.Provider value={mockDispatch}>
+      <SchemaContext.Provider
+        value={{ schema: INITIAL_SCHEMA, schemaDispatch: mockDispatch }}
+      >
         <EditorMenu />
-      </SchemaDispatchContext.Provider>
+      </SchemaContext.Provider>
     );
 
     const menuItem = screen
-      .getByTestId(`${FIELD_TYPES.textField}-menu-item`)
+      .getByTestId(`${FIELD_TYPES.TEXT_FIELD}-menu-item`)
       .querySelector('button');
-    fireEvent.click(menuItem);
+    expect(menuItem).not.toBeNull();
+    fireEvent.click(menuItem!);
 
     const mockTitle = 'Title';
     const titleConfigInput = screen
       .getByTestId('field-dialog')
       .querySelector('input[name=title]');
-    fireEvent.change(titleConfigInput, { target: { value: mockTitle } });
-    fireEvent.blur(titleConfigInput);
+    expect(titleConfigInput).not.toBeNull();
+    fireEvent.change(titleConfigInput!, { target: { value: mockTitle } });
+    fireEvent.blur(titleConfigInput!);
 
     const submitButton = screen.getByText('Create');
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       const dialogTitleElement = screen.queryByText(
-        `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.textField]}`
+        `Create Field - ${FIELD_TYPE_NAME_MAPPING[FIELD_TYPES.TEXT_FIELD]}`
       );
       expect(dialogTitleElement).not.toBeInTheDocument();
       expect(mockDispatch).toHaveBeenCalledWith(
-        expect.objectContaining({ type: ACTION_TYPE_ADD_FIELD })
+        expect.objectContaining({ type: SCHEMA_ACTION_TYPE.ADD_FIELD })
       );
     });
   });

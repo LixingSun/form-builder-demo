@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import { PropTypes } from 'prop-types';
 import {
   Typography,
   CardContent,
@@ -23,43 +22,44 @@ import {
 } from '@/constants/fieldConstants';
 import FieldDialog from './FieldDialog';
 import {
-  ACTION_TYPE_EDIT_FIELD,
-  ACTION_TYPE_DELETE_FIELD,
-  ACTION_TYPE_MOVE_UP_FIELD,
-  ACTION_TYPE_MOVE_DOWN_FIELD,
-  ACTION_TYPE_UPDATE_FORM_SETTINGS,
-  SchemaDispatchContext,
+  IField,
+  IFormSchema,
+  SCHEMA_ACTION_TYPE,
+  SchemaContext,
 } from '@/context/SchemaContext';
 import FormTitleDialog from './FormTitleDialog';
 
-export default function EditorContent({ schema }) {
-  const [isFieldEditingOpen, setIsFieldEditingOpen] = useState(false);
-  const [fieldEditingId, setFieldEditingId] = useState('');
-  const [fieldEditingType, setFieldEditingType] = useState(
-    FIELD_TYPES.textField
+interface IEditorContentProps {
+  schema: IFormSchema;
+}
+const EditorContent: React.FC<IEditorContentProps> = ({ schema }) => {
+  const [isFieldEditingOpen, setIsFieldEditingOpen] = useState<boolean>(false);
+  const [fieldEditingId, setFieldEditingId] = useState<string>('');
+  const [fieldEditingType, setFieldEditingType] = useState<FIELD_TYPES>(
+    FIELD_TYPES.TEXT_FIELD
   );
   const [fieldEditingInitialValues, setFieldEditingInitialValues] =
-    useState(null);
-  const [isFormEditingOpen, setIsFormEditingOpen] = useState(false);
-  const dispatch = useContext(SchemaDispatchContext);
+    useState<IField | null>(null);
+  const [isFormEditingOpen, setIsFormEditingOpen] = useState<boolean>(false);
+  const { schemaDispatch } = useContext(SchemaContext);
 
-  const handleEditField = (field) => {
+  const handleEditField = (field: IField) => {
     setFieldEditingType(field.type);
     setFieldEditingId(field.id);
     setFieldEditingInitialValues(field);
     setIsFieldEditingOpen(true);
   };
 
-  const handleDeleteField = (field) => {
-    dispatch({ type: ACTION_TYPE_DELETE_FIELD, field: field });
+  const handleDeleteField = (field: IField) => {
+    schemaDispatch({ type: SCHEMA_ACTION_TYPE.DELETE_FIELD, field: field });
   };
 
-  const handleMoveUpField = (field) => {
-    dispatch({ type: ACTION_TYPE_MOVE_UP_FIELD, field: field });
+  const handleMoveUpField = (field: IField) => {
+    schemaDispatch({ type: SCHEMA_ACTION_TYPE.MOVE_UP_FIELD, field: field });
   };
 
-  const handleMoveDownField = (field) => {
-    dispatch({ type: ACTION_TYPE_MOVE_DOWN_FIELD, field: field });
+  const handleMoveDownField = (field: IField) => {
+    schemaDispatch({ type: SCHEMA_ACTION_TYPE.MOVE_DOWN_FIELD, field: field });
   };
 
   return (
@@ -83,7 +83,7 @@ export default function EditorContent({ schema }) {
           </Card>
 
           {schema.fields.map((field, index) => {
-            const FieldIcon = FIELD_TYPE_ICON_MAPPING[FIELD_TYPES[field.type]];
+            const FieldIcon = FIELD_TYPE_ICON_MAPPING[field.type];
             return (
               <Card key={field.id}>
                 <CardContent sx={{ paddingY: 2 }}>
@@ -163,8 +163,8 @@ export default function EditorContent({ schema }) {
         initialValues={fieldEditingInitialValues}
         onClose={() => setIsFieldEditingOpen(false)}
         onSubmit={(formData) => {
-          dispatch({
-            type: ACTION_TYPE_EDIT_FIELD,
+          schemaDispatch({
+            type: SCHEMA_ACTION_TYPE.EDIT_FIELD,
             field: formData,
           });
           setIsFieldEditingOpen(false);
@@ -176,8 +176,8 @@ export default function EditorContent({ schema }) {
         initialValues={{ title: schema.title, description: schema.description }}
         onClose={() => setIsFormEditingOpen(false)}
         onSubmit={(formData) => {
-          dispatch({
-            type: ACTION_TYPE_UPDATE_FORM_SETTINGS,
+          schemaDispatch({
+            type: SCHEMA_ACTION_TYPE.UPDATE_FORM_SETTINGS,
             settings: formData,
           });
           setIsFormEditingOpen(false);
@@ -185,8 +185,6 @@ export default function EditorContent({ schema }) {
       />
     </>
   );
-}
-
-EditorContent.propTypes = {
-  schema: PropTypes.object,
 };
+
+export default EditorContent;

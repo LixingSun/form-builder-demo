@@ -1,26 +1,25 @@
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { GitHub as GithubIcon } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import { SchemaContext } from '@/context/SchemaContext';
 import {
-  ScreenLoadingDispatchContext,
-  ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+  ScreenLoadingContext,
+  SCREEN_LOADING_ACTION_TYPE,
 } from '@/context/ScreenLoadingContext';
 import PreviewForm from './PreviewForm';
 
-export function Preview() {
-  const schema = useContext(SchemaContext);
-
-  const isLoadingDispatch = useContext(ScreenLoadingDispatchContext);
+export const Preview: React.FC = () => {
+  const { schema } = useContext(SchemaContext);
+  const { isScreenLoadingDispatch } = useContext(ScreenLoadingContext);
 
   useEffect(() => {
-    isLoadingDispatch({
-      type: ACTION_TYPE_TOGGLE_SCREEN_LOADING,
+    isScreenLoadingDispatch({
+      type: SCREEN_LOADING_ACTION_TYPE.TOGGLE_SCREEN_LOADING,
       value: false,
     });
-  }, [isLoadingDispatch]);
+  }, [isScreenLoadingDispatch]);
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -44,6 +43,12 @@ export function Preview() {
             to="/"
             endIcon={<EditIcon />}
             sx={{ color: 'primary.contrastText' }}
+            onClick={() => {
+              isScreenLoadingDispatch({
+                type: SCREEN_LOADING_ACTION_TYPE.TOGGLE_SCREEN_LOADING,
+                value: true,
+              });
+            }}
           >
             Back to Edit
           </Button>
@@ -53,4 +58,4 @@ export function Preview() {
       <PreviewForm schema={schema} />
     </Box>
   );
-}
+};

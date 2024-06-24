@@ -1,90 +1,91 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { PropTypes } from 'prop-types';
 import { Box, Container, Paper, Grid, Typography, Button } from '@mui/material';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
 import PreviewField from './PreviewField';
 import { useMemo } from 'react';
+import { IField, IFormSchema } from '@/context/SchemaContext';
 
-const generateInitFormValues = (fields) => {
-  let formValues = {};
+interface FormValues {
+  [fieldKey: string]: string | number | null;
+}
+const generateInitFormValues = (fields: IField[]): FormValues => {
+  let formValues: FormValues = {};
   fields.forEach((field) => {
     switch (field.type) {
-      case FIELD_TYPES.textField:
+      case FIELD_TYPES.TEXT_FIELD:
         formValues[field.key] = '';
         return;
-      case FIELD_TYPES.number:
+      case FIELD_TYPES.NUMBER:
         formValues[field.key] = null;
         return;
-      case FIELD_TYPES.email:
+      case FIELD_TYPES.EMAIL:
         formValues[field.key] = '';
         return;
-      case FIELD_TYPES.dropdown:
+      case FIELD_TYPES.DROPDOWN:
         formValues[field.key] = '';
         return;
-      default:
-        throw Error('Unknown field type: ' + field.type);
     }
   });
   return formValues;
 };
 
-const generateValidationSchema = (fields) => {
-  let validationSchema = {};
+interface FormValidationSchema {
+  [fieldKey: string]: yup.StringSchema<any> | yup.NumberSchema<any>;
+}
+const generateValidationSchema = (fields: IField[]) => {
+  let validationSchema: FormValidationSchema = {};
   fields.forEach((field) => {
     let validators;
     switch (field.type) {
-      case FIELD_TYPES.textField:
+      case FIELD_TYPES.TEXT_FIELD:
         validators = yup.string();
         if (field.isRequired) {
           validators = validators.required('This field is required.');
         }
-        if (field.maxLength !== null) {
+        if (field.maxLength != null) {
           validators = validators.max(
             field.maxLength,
             `This field must be at most ${field.maxLength} characters.`
           );
         }
         break;
-      case FIELD_TYPES.number:
+      case FIELD_TYPES.NUMBER:
         validators = yup.number().nullable();
         if (field.isRequired) {
           validators = validators.required('This field is required.');
         }
-        if (field.minValue !== null) {
+        if (field.minValue != null) {
           validators = validators.min(
             field.minValue,
             `The minimum acceptable value is ${field.minValue}.`
           );
         }
-        if (field.maxValue !== null) {
+        if (field.maxValue != null) {
           validators = validators.max(
             field.maxValue,
             `The maximum acceptable value is ${field.maxValue}.`
           );
         }
         break;
-      case FIELD_TYPES.email:
+      case FIELD_TYPES.EMAIL:
         validators = yup.string().email('The email format is invalid');
         if (field.isRequired) {
           validators = validators.required('This field is required.');
         }
         break;
-      case FIELD_TYPES.dropdown:
+      case FIELD_TYPES.DROPDOWN:
         validators = yup.string();
         if (field.isRequired) {
           validators = validators.required('This field is required.');
         }
-        break;
-      default:
-        throw Error('Unknown field type: ' + field.type);
     }
     validationSchema[field.key] = validators;
   });
   return yup.object(validationSchema);
 };
 
-export default function PreviewForm({ schema }) {
+const PreviewForm: React.FC<{ schema: IFormSchema }> = ({ schema }) => {
   const { initialValues, validationSchema } = useMemo(() => {
     const { fields } = schema;
     return {
@@ -108,6 +109,7 @@ export default function PreviewForm({ schema }) {
         handleChange,
         handleBlur,
         setTouched,
+        isValid,
       }) => (
         <Box
           component="form"
@@ -144,7 +146,6 @@ export default function PreviewForm({ schema }) {
                     variant="contained"
                     fullWidth
                     type="submit"
-                    disabled={Object.keys(errors).length > 0}
                   >
                     Submit
                   </Button>
@@ -156,8 +157,6 @@ export default function PreviewForm({ schema }) {
       )}
     </Formik>
   );
-}
-
-PreviewForm.propTypes = {
-  schema: PropTypes.object,
 };
+
+export default PreviewForm;
