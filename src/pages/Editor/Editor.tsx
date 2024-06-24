@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, Grid } from '@mui/material';
 import {
@@ -7,23 +7,13 @@ import {
   GitHub as GithubIcon,
 } from '@mui/icons-material';
 import { SchemaContext, SCHEMA_ACTION_TYPE } from '@/context/SchemaContext';
-import {
-  ScreenLoadingContext,
-  SCREEN_LOADING_ACTION_TYPE,
-} from '@/context/ScreenLoadingContext';
 import EditorMenu from './EditorMenu';
 import EditorContent from './EditorContent';
+import { useScreenLoading } from '@/hooks/useScreenLoading';
 
 export function Editor() {
   const { schema, schemaDispatch } = useContext(SchemaContext);
-  const { isScreenLoadingDispatch } = useContext(ScreenLoadingContext);
-
-  useEffect(() => {
-    isScreenLoadingDispatch({
-      type: SCREEN_LOADING_ACTION_TYPE.TOGGLE_SCREEN_LOADING,
-      value: false,
-    });
-  }, [isScreenLoadingDispatch]);
+  const { toggleOnScreenLoading } = useScreenLoading();
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -59,10 +49,7 @@ export function Editor() {
             endIcon={<PreviewIcon />}
             sx={{ color: 'primary.contrastText' }}
             onClick={() => {
-              isScreenLoadingDispatch({
-                type: SCREEN_LOADING_ACTION_TYPE.TOGGLE_SCREEN_LOADING,
-                value: true,
-              });
+              toggleOnScreenLoading();
             }}
           >
             Preview
