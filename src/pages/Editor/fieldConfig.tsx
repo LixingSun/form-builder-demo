@@ -4,6 +4,7 @@ import { TextField, FormControlLabel, Switch } from '@mui/material';
 import { FIELD_TYPES } from '@/constants/fieldConstants';
 import { IFieldBase } from '@/context/SchemaContext';
 import { FormikErrors, FormikTouched } from 'formik';
+import { ERROR_MESSAGE_REQUIRED } from "@/constants/validationConstants";
 
 interface IConfigProps {
   defaultValue?: string | number | boolean | null;
@@ -262,23 +263,23 @@ export const getFieldValidationSchema = (fieldType: FIELD_TYPES) => {
   switch (fieldType) {
     case FIELD_TYPES.TEXT_FIELD:
       validators = {
-        title: yup.string().required('This field is required.'),
+        title: yup.string().required(ERROR_MESSAGE_REQUIRED),
       };
       break;
     case FIELD_TYPES.NUMBER:
       validators = {
-        title: yup.string().required('This field is required.'),
+        title: yup.string().required(ERROR_MESSAGE_REQUIRED),
       };
       break;
     case FIELD_TYPES.EMAIL:
       validators = {
-        title: yup.string().required('This field is required.'),
+        title: yup.string().required(ERROR_MESSAGE_REQUIRED),
       };
       break;
     case FIELD_TYPES.DROPDOWN:
       validators = {
-        title: yup.string().required('This field is required.'),
-        options: yup.string().required('This field is required.'),
+        title: yup.string().required(ERROR_MESSAGE_REQUIRED),
+        options: yup.string().required(ERROR_MESSAGE_REQUIRED),
       };
       break;
   }

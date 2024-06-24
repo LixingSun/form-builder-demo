@@ -5,6 +5,13 @@ import { FIELD_TYPES } from '@/constants/fieldConstants';
 import PreviewField from './PreviewField';
 import { useMemo } from 'react';
 import { IField, IFormSchema } from '@/context/SchemaContext';
+import {
+  ERROR_MESSAGE_REQUIRED,
+  ERROR_MESSAGE_EXCEED_MAX_LENGTH,
+  ERROR_MESSAGE_INVALID_EMAIL,
+  ERROR_MESSAGE_LESS_THAN_MIN_VALUE,
+  ERROR_MESSAGE_EXCEED_MAX_VALUE,
+} from '@/constants/validationConstants';
 
 interface FormValues {
   [fieldKey: string]: string | number | null;
@@ -41,43 +48,43 @@ const generateValidationSchema = (fields: IField[]) => {
       case FIELD_TYPES.TEXT_FIELD:
         validators = yup.string();
         if (field.isRequired) {
-          validators = validators.required('This field is required.');
+          validators = validators.required(ERROR_MESSAGE_REQUIRED);
         }
         if (field.maxLength != null) {
           validators = validators.max(
             field.maxLength,
-            `This field must be at most ${field.maxLength} characters.`
+            ERROR_MESSAGE_EXCEED_MAX_LENGTH(field.maxLength)
           );
         }
         break;
       case FIELD_TYPES.NUMBER:
         validators = yup.number().nullable();
         if (field.isRequired) {
-          validators = validators.required('This field is required.');
+          validators = validators.required(ERROR_MESSAGE_REQUIRED);
         }
         if (field.minValue != null) {
           validators = validators.min(
             field.minValue,
-            `The minimum acceptable value is ${field.minValue}.`
+            ERROR_MESSAGE_LESS_THAN_MIN_VALUE(field.minValue)
           );
         }
         if (field.maxValue != null) {
           validators = validators.max(
             field.maxValue,
-            `The maximum acceptable value is ${field.maxValue}.`
+            ERROR_MESSAGE_EXCEED_MAX_VALUE(field.maxValue)
           );
         }
         break;
       case FIELD_TYPES.EMAIL:
-        validators = yup.string().email('The email format is invalid');
+        validators = yup.string().email(ERROR_MESSAGE_INVALID_EMAIL);
         if (field.isRequired) {
-          validators = validators.required('This field is required.');
+          validators = validators.required(ERROR_MESSAGE_REQUIRED);
         }
         break;
       case FIELD_TYPES.DROPDOWN:
         validators = yup.string();
         if (field.isRequired) {
-          validators = validators.required('This field is required.');
+          validators = validators.required(ERROR_MESSAGE_REQUIRED);
         }
     }
     validationSchema[field.key] = validators;

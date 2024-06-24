@@ -9,6 +9,7 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IFormSettings } from '@/context/SchemaContext';
+import { ERROR_MESSAGE_REQUIRED } from '@/constants/validationConstants';
 
 interface IFormTitleDialogProps {
   open: boolean;
@@ -27,8 +28,8 @@ const FormTitleDialog: React.FC<IFormTitleDialogProps> = ({
     {
       initialValues,
       validationSchema: yup.object({
-        title: yup.string().required('This field is required.'),
-        description: yup.string().required('This field is required.'),
+        title: yup.string().required(ERROR_MESSAGE_REQUIRED),
+        description: yup.string().required(ERROR_MESSAGE_REQUIRED),
       }),
       onSubmit: (values) => {
         onSubmit(values);
